@@ -1,0 +1,42 @@
+.profil {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.profil > h1 {
+  position: absolute;
+  top: 200px;
+}
+.profil .form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  position: relative;
+}
+.profil .form-group label {
+  margin-bottom: 5px;
+}
+.profil .form-group input {
+  width: 300px;
+  padding: 5px 10px;
+  font-size: 15px;
+}
+.profil #password .icon {
+  cursor: pointer;
+  position: absolute;
+  right: 8px;
+  top: 33.5px;
+  font-size: 15px;
+}
+.profil .form-group input[type='submit'] {
+  margin-top: 20px;
+  cursor: pointer;
+  background-color: var(--side-color);
+  color: var(--main-color);
+  border: none;
+  font-size: 20px;
+}

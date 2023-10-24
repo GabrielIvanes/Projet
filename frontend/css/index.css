@@ -1,0 +1,30 @@
+@import url('./nav.css');
+@import url('./profil.css');
+
+:root {
+  --main-color: #f0e7bf;
+  --side-color: #036c3f;
+  --card-color: #f5f5dc;
+  --main-font: 'Montserrat';
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: var(--main-font), Arial, Helvetica, sans-serif;
+  color: var(--side-color);
+}
+.main-wrapper {
+  min-height: 100vh;
+  width: 100wh;
+  display: flex;
+  align-items: center;
+  background-color: var(--main-color);
+}
+.main-contenu {
+  height: 96vh;
+  flex: 1;
+  border-radius: 12px;
+  background-color: var(--card-color);
+  margin-right: 2vh;
+}

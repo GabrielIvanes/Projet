@@ -1,0 +1,32 @@
+.side-bar {
+  height: 96vh;
+  width: fit-content;
+  padding: 10px;
+  background-color: var(--card-color);
+  border-radius: 12px;
+  margin-left: 2vh;
+  margin-right: 2vh;
+}
+.side-bar h1 {
+  text-align: center;
+}
+.side-bar ul {
+  list-style-type: none;
+  margin-top: 50px;
+}
+.side-bar ul li {
+  margin: 30px 0;
+}
+.side-bar ul li a {
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 5px 10px;
+  font-size: 20px;
+  text-decoration: none;
+}
+.side-bar ul li a i {
+  margin-right: 7px;
+}
+.side-bar ul li a:hover {
+  background-color: var(--main-color);
+}
