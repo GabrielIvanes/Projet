@@ -4,9 +4,9 @@ echo '
     <h1>IMangerMieux</h1>
     <ul>
         <li><a href="#"><i class="fa-solid fa-chart-line"></i>Tableau de bord</a></li>
-        <li><a href="#"><i class="fa-solid fa-scroll"></i>Journal</a></li>
-        <li><a href="#"><i class="fa-solid fa-utensils"></i>Aliments</a></li>
-        <li><a href="#"><i class="fa-regular fa-user"></i>Profil</a></li>
+        <li><a href="journal.php"><i class="fa-solid fa-scroll"></i>Journal</a></li>
+        <li><a href="aliments.php"><i class="fa-solid fa-utensils"></i>Aliments</a></li>
+        <li><a href="profil.php"><i class="fa-regular fa-user"></i>Profil</a></li>
     </ul>
 </nav>
 ';
