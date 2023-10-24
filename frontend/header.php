@@ -15,6 +15,4 @@
     <div class="main-wrapper">
     ';
     require_once("nav.php");
-    echo '<div class="main-contenu">';
-    
 ?>

@@ -7,8 +7,7 @@
   flex-direction: column;
 }
 .profil > h1 {
-  position: absolute;
-  top: 200px;
+  margin-bottom: 20px;
 }
 .profil .form-group {
   display: flex;
@@ -16,12 +15,13 @@
   align-items: flex-start;
   margin-bottom: 10px;
   position: relative;
+  justify-content: center;
 }
 .profil .form-group label {
   margin-bottom: 5px;
 }
 .profil .form-group input {
-  width: 300px;
+  width: 325px;
   padding: 5px 10px;
   font-size: 15px;
 }
@@ -39,4 +39,67 @@
   color: var(--main-color);
   border: none;
   font-size: 20px;
+}
+.profil .radio {
+  flex-direction: row;
+  width: 90px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.profil .radio input {
+  width: fit-content;
+  accent-color: var(--side-color);
+}
+.profil .row {
+  display: flex;
+  margin-bottom: 10px;
+}
+.profil .row > div {
+  margin: 0 10px;
+}
+.profil .row > div:first-of-type {
+  margin-left: 0;
+}
+.profil .row > div:last-of-type {
+  margin-right: 0;
+}
+.profil .poids-wrapper input,
+.profil .taille-wrapper input,
+.profil .age-wrapper input {
+  width: 60px;
+}
+.profil .pratique-sportive-wrapper > div {
+  width: 150px;
+}
+.profil .parametre > div {
+  margin-bottom: 10px;
+}
+.profil .parametre .label {
+  margin-bottom: 5px;
+  font-size: 17px;
+}
+.profil .parametre .pratique-sportive-wrapper > div {
+  width: fit-content;
+}
+.profil .parametre .modifier-wrapper {
+  text-align: center;
+}
+.profil .parametre .modifier {
+  width: 325px;
+  background-color: var(--side-color);
+  color: var(--main-color);
+  font-size: 20px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.inscription-wrapper,
+.parametre-wrapper {
+  display: none;
+}
+.creer-compte {
+  cursor: pointer;
+}
+.creer-compte:hover {
+  text-decoration: underline;
 }

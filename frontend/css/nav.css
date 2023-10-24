@@ -18,15 +18,27 @@
   margin: 30px 0;
 }
 .side-bar ul li a {
-  border: 1px solid black;
+  border: 1px solid var(--side-color);
   border-radius: 10px;
   padding: 5px 10px;
-  font-size: 20px;
+  font-size: 17px;
   text-decoration: none;
 }
 .side-bar ul li a i {
   margin-right: 7px;
 }
 .side-bar ul li a:hover {
-  background-color: var(--main-color);
+  background-color: var(--side-color);
+  color: var(--main-color);
+}
+.side-bar ul li a:hover i {
+  background-color: var(--side-color);
+  color: var(--main-color);
+}
+.side-bar ul li .active {
+  background-color: var(--side-color);
+  color: var(--main-color);
+}
+.side-bar ul li .active i {
+  color: var(--main-color);
 }
