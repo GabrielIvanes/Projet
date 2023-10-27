@@ -3,19 +3,17 @@
 require_once('header.php');active_menu('profil');
 echo '<div class="main-contenu">';
 
-$isUpdate = false;
-
 echo '
 <div class="profil connexion-wrapper">
     <h1>Se connecter</h1>
-    <form action="" method="POST" id="connexion">
+    <form action="" id="connexion" onsubmit="handleConnexionFormUtilisateur(event);">
         <div class="form-group">
             <label for="email">E-mail :</label>
-            <input type="text" id="email" name="email" placeholder="john.doe@exemple.com">
+            <input type="email" id="email-connexion" name="email" placeholder="john.doe@exemple.com">
         </div>
-        <div class="form-group" id="password">
+        <div class="form-group password">
             <label for="password">Mot de Passe :</label>
-            <input type="password" id="password-input" name="password">
+            <input type="password" id="password-connexion" class="password-input" name="password">
             <i class="fa-solid fa-eye icon" onclick="formUserEyeClick();"></i>
         </div>
         <div class="form-group">
@@ -30,39 +28,43 @@ echo '
 echo '
 <div class="profil inscription-wrapper">
     <h1>S\'inscrire</h1>
-    <form action="" method="POST" id="inscription">
+    <form action="" id="inscription" onsubmit="handleSubmitFormUtilisateur(event);">
         <div class="form-group">
             <label for="email">E-mail :</label>
-            <input type="text" id="email" name="email" placeholder="john.doe@exemple.com" required>
+            <input type="email" id="email-inscription" name="email" placeholder="john.doe@exemple.com" required>
         </div>
-        <div class="form-group" id="password">
+        <div class="form-group">
+            <label for="nom_utilisateur">Nom d\'utilisateur :</label>
+            <input type="text" id="nom_utilisateur" name="nom_utilisateur" placeholder="John Doe" required>
+        </div>
+        <div class="form-group password">
             <label for="password">Mot de Passe :</label>
-            <input type="password" id="password-input" name="password" required>
+            <input type="password" id="password-inscription" class="password-input" name="password" required>
             <i class="fa-solid fa-eye icon" onclick="formUserEyeClick();"></i>
         </div>
         <div class="form-group">
             <label for="sexe">Sexe :</label>
             <div class="radio">
                 <label for="sexe-M">Masculin</label>
-                <input type="radio" id="sexe-M" name="sexe" value="masculin" required>
+                <input type="radio" id="sexe-M" name="sexe" value="0" required>
             </div>
             <div class="radio">
                 <label for="sexe-F">Féminin</label>
-                <input type="radio" id="sexe-F" name="sexe" value="feminin" required>
+                <input type="radio" id="sexe-F" name="sexe" value="1" required>
             </div>
         </div>
         <div class="row"> 
             <div class="form-group poids-wrapper">
                 <label for="poids">Poids (en kg) :</label>
-                <input type="text" id="poids" name="poids" placeholder="kg" required>
+                <input type="text" id="poids" name="poids" placeholder="kg" required pattern="[0-9]+">
             </div>
             <div class="form-group taille-wrapper">
                 <label for="taille">Taille (en cm) :</label>
-                <input type="text" id="taille" name="taille" placeholder="cm" required>
+                <input type="text" id="taille" name="taille" placeholder="cm" required pattern="[0-9]+">
             </div>
             <div class="form-group age-wrapper">
                 <label for="age">Âge :</label>
-                <input type="text" id="age" name="age" required>
+                <input type="text" id="age" name="age" required pattern="[0-9]+">
             </div>
         </div>
     
@@ -71,21 +73,21 @@ echo '
 
             <div class="radio">
                 <label for="sedentaire">Sédentaire</label>
-                <input type="radio" id="sedentaire" name="pratique-sportive" value="sedentaire" required>
+                <input type="radio" id="sedentaire" name="pratique-sportive" value="1" required>
             </div>
             <div class="radio">
                 <label for=actif">Actif</label>
-                <input type="radio" id=actif" name="pratique-sportive" value="actif" required>
+                <input type="radio" id=actif" name="pratique-sportive" value="2" required>
             </div>
 
 
             <div class="radio">
                 <label for=tres-actif">Très actif</label>
-                <input type="radio" id=tres-actif" name="pratique-sportive" value="tres-actif" required>
+                <input type="radio" id=tres-actif" name="pratique-sportive" value="3" required>
             </div>
             <div class="radio">
                 <label for=extrement-actif">Extrêment actif</label>
-                <input type="radio" id=extrement-actif" name="pratique-sportive" value="extrement-actif" required>
+                <input type="radio" id=extrement-actif" name="pratique-sportive" value="4" required>
             </div>
 
         </div>
@@ -93,6 +95,7 @@ echo '
             <input type="submit" value="S\'inscrire">
         </div>
     </form>
+    <div class="error-message"></div>
 </div>
 ';
 
