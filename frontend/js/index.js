@@ -1,7 +1,8 @@
+const serverUrl = 'http://localhost/IDAW/Projet/backend/controllers';
 // Permet de modifier la visibilité du mot de passe
 function formUserEyeClick() {
-  const input = $(document).find('#password-input');
-  const icon = $(document).find('#password i');
+  const input = $(document).find('.password-input');
+  const icon = $(document).find('.password i');
 
   if (input.attr('type') === 'password') {
     input.attr('type', 'text');
@@ -21,8 +22,10 @@ function changementProfilContenu() {
   if (connexion.css('display') === 'none') {
     connexion.css('display', 'flex');
     inscription.css('display', 'none');
+    $('.retour').css('display', 'none');
   } else {
     connexion.css('display', 'none');
     inscription.css('display', 'flex');
+    $('.retour').css('display', 'block');
   }
 }

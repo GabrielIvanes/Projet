@@ -7,13 +7,13 @@ const serverUrlAliment = `${serverUrl}/aliments`;
 
 async function getAllAliments() {
   try {
-    const response = await $.ajax({
+    const reponse = await $.ajax({
       url: `${serverUrlAliment}/getAllAliments.php`,
       method: 'GET',
       dataType: 'json',
     });
 
-    return response.aliments;
+    return reponse.aliments;
   } catch (err) {
     console.error(err);
   }
@@ -21,12 +21,12 @@ async function getAllAliments() {
 
 async function getAllCat() {
   try {
-    const response = await $.ajax({
+    const reponse = await $.ajax({
       url: `${serverUrlAliment}/getAllCat.php`,
       method: 'GET',
       dataType: 'json',
     });
-    return response.categories;
+    return reponse.categories;
   } catch (err) {
     console.error(err);
   }
@@ -102,13 +102,13 @@ async function getOneAliment(id) {
   };
 
   try {
-    const response = await $.ajax({
+    const reponse = await $.ajax({
       url: `${serverUrlAliment}/getOneAliment.php`,
       method: 'POST',
       data: JSON.stringify(data),
       contentType: 'application/json',
     });
-    return response;
+    return reponse;
   } catch (err) {
     console.error(err);
   }

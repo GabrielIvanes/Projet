@@ -35,7 +35,7 @@ echo '
         </div>
         <div class="form-group">
             <label for="nom_utilisateur">Nom d\'utilisateur :</label>
-            <input type="text" id="nom_utilisateur" name="nom_utilisateur" placeholder="John Doe" required>
+            <input type="text" id="nom_utilisateur" name="nom_utilisateur" placeholder="John Doe" required maxLength="20">
         </div>
         <div class="form-group password">
             <label for="password">Mot de Passe :</label>
@@ -96,6 +96,7 @@ echo '
         </div>
     </form>
     <div class="error-message"></div>
+    <div class="retour" onclick="gobackToLogIn();">Retour</div>
 </div>
 ';
 
@@ -105,30 +106,38 @@ echo '
     <div class="parametre">
         <div>
             <div class="label">E-mail :</div>
-            <div class="email">John.doe@exemple.com</div>
+            <div class="email"></div>
+        </div>
+        <div>
+            <div class="label">Nom d\'utilisateur :</div>
+            <div class="nom_utilisateur"></div>
+        </div>
+        <div>
+            <div class="label">Mot de passe :</div>
+            <div class="password">Modifier votre mot de passe : <button><i class="fa-solid fa-pen-to-square"></i></button></div>
         </div>
         <div>
             <div class="label">Sexe :</div>
-            <div class="sexe">Masculin</div>
+            <div class="sexe"></div>
         </div>
         <div class="row"> 
             <div class="poids-wrapper">
                 <div class="label">Poids (en kg) :</div>
-                <div class="poids">90 kg</div>
+                <div class="poids"></div>
             </div>
             <div class="taille-wrapper">
                 <div class="label">Taille (en cm) :</div>
-                <div class="taille">100 cm</div>
+                <div class="taille"></div>
             </div>
             <div class="age-wrapper">
                 <div class="label">Âge :</div>
-                <div class="age">40 ans</div>
+                <div class="age"></div>
             </div>
         </div>
     
         <div class="pratique-sportive-wrapper">
             <div class="label">Pratique sportive :</div>
-            <div class="pratique-sportive">Extrêmement actif</div>
+            <div class="pratique-sportive"></div>
         </div>
         <div class="modifier-wrapper">
             <button class="modifier">Modifier</button>

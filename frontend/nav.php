@@ -11,19 +11,32 @@ function active_menu($currentPageId) {
 
     echo '
     <nav class="side-bar">
-        <h1>IMangerMieux</h1>
-        <ul>
-        ';
-    foreach($myMenu as $pageId => $pageLabel) {
-        if ($pageId === $currentPageId) {
-            echo '<li><a href="'.$pageId.'.php" class="active">'.$pageLabel.'</a></li>';
-        } else {
-            echo '<li><a href="'.$pageId.'.php">'.$pageLabel.'</a></li>';
-        }
-    }
+        <div>
+            <a href="index.php"><h1>IMangerMieux</h1></a>
+            <ul>
+            ';
+            foreach($myMenu as $pageId => $pageLabel) {
+                if ($pageId === $currentPageId) {
+                    echo '<li><a href="'.$pageId.'.php" class="active">'.$pageLabel.'</a></li>';
+                } else {
+                    echo '<li><a href="'.$pageId.'.php">'.$pageLabel.'</a></li>';
+                }
+            }
 echo '
-        </ul>
+            </ul>
+        </div>
+        <div class="nav-user-bottom">
+            <div class="user">
+                <span>Bonjour </span>
+                <span class="nav-user-nom"></span>
+                <span> !</span>
+            </div>
+            <button onclick="seDeconnecter();">Se déconnecter</button>
+        </div>
     </nav>
+    ';
+    echo '
+    
     ';
     
 }
