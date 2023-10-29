@@ -1,0 +1,26 @@
+.aliments {
+  margin: 0 50px;
+}
+.aliments > h1,
+.aliments .ajout-aliment h2 {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 30px;
+  margin-top: 10px;
+}
+.aliments .ajout-aliment {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.aliments #table-aliments button {
+  background-color: transparent;
+  border: none;
+  margin: 0 10px;
+  font-size: 15px;
+  cursor: pointer;
+}
+.aliments #table-aliments button:first-of-type {
+  margin-left: 0;
+}
