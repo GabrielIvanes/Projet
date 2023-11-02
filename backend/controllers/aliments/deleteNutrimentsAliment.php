@@ -9,23 +9,23 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 $data = json_decode(file_get_contents("php://input"));
 
-if(!empty($data->id_aliment) ) {
-    $id = $data->id_aliment;
+if(!empty($data->alimentId) ) {
+    $alimentId = $data->alimentId;
 
-    $sql = "DELETE FROM ALIMENT WHERE ID = :id";
+    $sql = "DELETE FROM CONTIENT WHERE ALI_ID = :alimentId";
 
     $request = $pdo->prepare($sql);
-    $id = htmlspecialchars(strip_tags($id));
-    $request->bindParam(":id", $id);
+    $alimentId = htmlspecialchars(strip_tags($alimentId));
+    $request->bindParam(":alimentId", $alimentId);
 
     if ($request->execute()) {
          http_response_code(200);
   
-        echo json_encode(array("message" => `L'aliment numéro $id a bien été supprimé.`));
+        echo json_encode(array("message" => `les nutriments de l'aliment numéro $alimentId ont bien été supprimés.`));
     } else {
         http_response_code(503);
   
-        echo json_encode(array("message" => "La suppression de l'aliment n'est pas possible."));
+        echo json_encode(array("message" => "La suppression des nutriments n'est pas possible."));
     }
 } else {
     http_response_code(400);

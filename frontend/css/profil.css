@@ -30,6 +30,7 @@
 }
 .profil .row {
   display: flex;
+  justify-content: center;
   margin-bottom: 10px;
 }
 .profil .row > div {
@@ -51,18 +52,20 @@
 }
 .profil .parametre > div {
   margin-bottom: 10px;
+  text-align: center;
 }
 .profil .parametre .label {
   margin-bottom: 5px;
   font-size: 17px;
 }
 .profil .parametre .pratique-sportive-wrapper > div {
-  width: fit-content;
+  width: 100%;
 }
-.profil .parametre .modifier-wrapper {
+.profil .parametre .button-wrapper {
   text-align: center;
 }
-.profil .parametre .modifier {
+.profil .parametre .modifier,
+.profil .parametre .supprimer {
   width: 325px;
   background-color: var(--side-color);
   color: var(--main-color);

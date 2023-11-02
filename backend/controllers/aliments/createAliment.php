@@ -24,9 +24,12 @@ if(!empty($data->categorie_id) && !empty($data->nom)){
     $request->bindParam(":nom", $nom);
 
     if ($request->execute()) {
+
+        $alimentIdCréé = $pdo->lastInsertId();
+        
         http_response_code(201);
   
-        echo json_encode(array("message" => `L'aliment $nom a été ajouté.`));
+        echo json_encode(array("message" => "L'aliment $nom a été ajouté.", "alimentId" => $alimentIdCréé));
     } else {
         http_response_code(503);
   

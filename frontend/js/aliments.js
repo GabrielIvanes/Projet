@@ -1,9 +1,5 @@
-const tableAliments = $('#table-aliments').DataTable({
-  pageLength: 5,
-  lengthChange: false,
-});
-
 const serverUrlAliment = `${serverUrl}/aliments`;
+let tableAliments = '';
 
 async function getAllAliments() {
   try {
@@ -32,6 +28,19 @@ async function getAllCat() {
   }
 }
 
+async function getAllNutriments() {
+  try {
+    const reponse = await $.ajax({
+      url: `${serverUrlAliment}/getAllNutriments.php`,
+      method: 'GET',
+      dataType: 'json',
+    });
+    return reponse.nutriments;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 async function createAliment(nom, categorie_id) {
   const data = {
     nom,
@@ -39,19 +48,53 @@ async function createAliment(nom, categorie_id) {
   };
 
   try {
-    await $.ajax({
+    const reponse = await $.ajax({
       url: `${serverUrlAliment}/createAliment.php`,
       method: 'POST',
       data: JSON.stringify(data),
       contentType: 'application/json',
     });
-
+    alimentId = reponse.alimentId;
     $('#nom-aliment').val('');
     $('#categorie-select').val('');
-    createTbody();
+    createRelationAlimentNutriment(alimentId);
   } catch (err) {
     console.error(err);
   }
+}
+
+async function createRelationAlimentNutriment(alimentId) {
+  const nutriments = await getAllNutriments();
+
+  for (const nutriment of nutriments) {
+    let nutrimentInput = '';
+    if (nutriment.nom === 'Protéines') {
+      nutrimentInput = $('#proteines-aliment');
+    } else {
+      nutrimentInput = $(`#${nutriment.nom.toLowerCase()}-aliment`);
+    }
+    if (nutrimentInput.val()) {
+      const data = {
+        alimentId: alimentId,
+        nutrimentId: nutriment.id,
+        quantite: nutrimentInput.val(),
+      };
+
+      try {
+        await $.ajax({
+          url: `${serverUrlAliment}/createRelationAlimentNutriment.php`,
+          method: 'POST',
+          data: JSON.stringify(data),
+          contentType: 'application/json',
+        });
+        nutrimentInput.val('');
+        changementAlimentContenu();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+  createTBody();
 }
 
 async function deleteAliment(id) {
@@ -66,7 +109,25 @@ async function deleteAliment(id) {
       data: JSON.stringify(data),
       contentType: 'application/json',
     });
-    createTbody();
+    createTBody();
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function deleteNutrimentsAliment(alimentId) {
+  const data = {
+    alimentId,
+  };
+
+  try {
+    await $.ajax({
+      url: `${serverUrlAliment}/deleteNutrimentsAliment.php`,
+      method: 'DELETE',
+      data: JSON.stringify(data),
+      contentType: 'application/json',
+    });
+    deleteAliment(alimentId);
   } catch (err) {
     console.error(err);
   }
@@ -86,14 +147,60 @@ async function updateAliment(id, nom, categorie_id) {
       data: JSON.stringify(data),
       contentType: 'application/json',
     });
-
-    $('.form-group input[type="submit"]').val('Ajouter');
-    $('#nom-aliment').val('');
-    $('#categorie-select').val('');
-    createTbody();
+    updateRelationAlimentNutriment(id);
   } catch (err) {
     console.error(err);
   }
+}
+
+async function updateRelationAlimentNutriment(alimentId) {
+  const nutriments = await getAllNutriments();
+
+  for (const nutriment of nutriments) {
+    let nutrimentInput = '';
+    if (nutriment.nom === 'Protéines') {
+      nutrimentInput = $('#proteines-aliment');
+    } else {
+      nutrimentInput = $(`#${nutriment.nom.toLowerCase()}-aliment`);
+    }
+    if (nutrimentInput.val()) {
+      const nutrimentsAliment = await getNutrimentsAliment(alimentId);
+      let isExisting = false;
+      if (nutrimentsAliment) {
+        if (
+          nutrimentsAliment.find(
+            (nutrimentAliment) => nutrimentAliment.nutrimentId === nutriment.id
+          )
+        )
+          isExisting = true;
+      }
+
+      const data = {
+        alimentId: alimentId,
+        nutrimentId: nutriment.id,
+        quantite: nutrimentInput.val(),
+      };
+      try {
+        const reponse = await $.ajax({
+          url: `${serverUrlAliment}/${
+            isExisting ? 'update' : 'create'
+          }RelationAlimentNutriment.php`,
+          method: 'PUT',
+          data: JSON.stringify(data),
+          contentType: 'application/json',
+        });
+        console.log(reponse);
+        nutrimentInput.val('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+  $('.aliments .form-group input[type="submit"]').val('Ajouter');
+  $('#nom-aliment').val('');
+  $('#categorie-select').val('');
+  createTBody();
+  changementAlimentContenu();
 }
 
 async function getOneAliment(id) {
@@ -114,28 +221,111 @@ async function getOneAliment(id) {
   }
 }
 
-async function createTbody() {
+async function getNutrimentsAliment(alimentId) {
+  const data = {
+    alimentId,
+  };
+
+  try {
+    const reponse = await $.ajax({
+      url: `${serverUrlAliment}/getNutrimentsAliment.php`,
+      method: 'POST',
+      data: JSON.stringify(data),
+      contentType: 'application/json',
+    });
+    return reponse.contient;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// async function addOneElementTBody(alimentId) {
+//   const aliment = await getOneAliment(alimentId);
+//   const nutriments = await getAllNutriments();
+//   const nutrimentsOfAliment = await getNutrimentsAliment(alimentId);
+
+//   const nutrimentsCol = await Promise.all(
+//     nutriments.map(async (nutriment) => {
+//       if (nutrimentsOfAliment) {
+//         const nutrimentOfAliment = nutrimentsOfAliment.find(
+//           (nutrimentOfAliment) =>
+//             nutrimentOfAliment.nutrimentId === nutriment.id
+//         );
+//         return nutrimentOfAliment ? nutrimentOfAliment.quantite : '';
+//       } else {
+//         return '';
+//       }
+//     })
+//   );
+
+//   tableAliments.rows.add([
+//     aliment.id,
+//     aliment.nom,
+//     catNom,
+//     ...nutrimentsCol,
+//     `
+//         <button onclick="onClickUpdate(event, ${aliment.id});"><i class='fas fa-edit icon'></i></button>
+//         <button onclick="onClickDelete(event, ${aliment.id});"><i class='fas fa-trash icon'></i></button>`,
+//   ]);
+
+//   tableAliments.draw();
+// }
+
+async function createTBody() {
+  if (tableAliments === '') {
+    await createHeadOfTable();
+
+    tableAliments = $('#table-aliments').DataTable({
+      pageLength: 5,
+      lengthChange: false,
+    });
+  }
+
   tableAliments.clear();
 
-  const aliments = await getAllAliments();
-  const categories = await getAllCat();
+  try {
+    const aliments = await getAllAliments();
+    const categories = await getAllCat();
+    const nutriments = await getAllNutriments();
 
-  await aliments.map(async (aliment) => {
-    const catNom = categories.find(
-      (categorie) => categorie.id === aliment.categorie_id
-    ).nom;
+    const rows = await Promise.all(
+      aliments.map(async (aliment) => {
+        const catNom = categories.find(
+          (categorie) => categorie.id === aliment.categorie_id
+        ).nom;
 
-    tableAliments.row.add([
-      aliment.id,
-      aliment.nom,
-      catNom,
-      `
-        <button onclick="onClickUpdate(event, ${aliment.id});"><i class='fas fa-edit icon'></i></button>
-        <button onclick="onClickDelete(event, ${aliment.id});"><i class='fas fa-trash icon'></i></button>`,
-    ]);
-  });
+        const nutrimentsOfAliment = await getNutrimentsAliment(aliment.id);
 
-  tableAliments.draw();
+        const nutrimentsCol = await Promise.all(
+          nutriments.map(async (nutriment) => {
+            if (nutrimentsOfAliment) {
+              const nutrimentOfAliment = nutrimentsOfAliment.find(
+                (nutrimentOfAliment) =>
+                  nutrimentOfAliment.nutrimentId === nutriment.id
+              );
+              return nutrimentOfAliment ? nutrimentOfAliment.quantite : '';
+            } else {
+              return '';
+            }
+          })
+        );
+
+        return [
+          aliment.id,
+          aliment.nom,
+          catNom,
+          ...nutrimentsCol,
+          `
+            <button onclick="onClickUpdate(event, ${aliment.id});"><i class='fas fa-edit icon'></i></button>
+            <button onclick="onClickDelete(event, ${aliment.id});"><i class='fas fa-trash icon'></i></button>`,
+        ];
+      })
+    );
+
+    tableAliments.rows.add(rows).draw();
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 async function createOptionsCategories() {
@@ -155,21 +345,58 @@ async function createOptionsCategories() {
   }
 }
 
+async function createHeadOfTable() {
+  const nutriments = await getAllNutriments();
+
+  const thead = $('#table-aliments thead tr');
+
+  for (const nutriment of nutriments) {
+    const th = $('<th>').text(nutriment.nom);
+    thead.append(th);
+  }
+
+  const th = $('<th>').text('Opérations');
+  thead.append(th);
+}
+
 function onClickDelete(event, id) {
   event.preventDefault();
-  deleteAliment(id);
+  deleteNutrimentsAliment(id);
 }
 
 async function onClickUpdate(event, id) {
   event.preventDefault();
 
-  document.cookie = `idUpdateAliment = ${id}`;
+  document.cookie = `idUpdateAliment=${id}`;
 
   const { _, nom, categorie_id } = await getOneAliment(id);
 
-  $('.form-group input[type="submit"]').val('Modifier');
+  const nutriments = await getAllNutriments();
+
+  for (const nutriment of nutriments) {
+    const nutrimentsAliment = await getNutrimentsAliment(id);
+
+    if (nutrimentsAliment) {
+      const nutrimentAliment = nutrimentsAliment.find(
+        (nutrimentOfAliment) => nutrimentOfAliment.nutrimentId === nutriment.id
+      );
+
+      if (nutrimentAliment) {
+        if (nutriment.nom === 'Protéines') {
+          $('#proteines-aliment').val(nutrimentAliment.quantite);
+        } else {
+          $(`#${nutriment.nom.toLowerCase()}-aliment`).val(
+            nutrimentAliment.quantite
+          );
+        }
+      }
+    }
+  }
+  $('.aliments h2').text('Modifier un aliment');
+  $('.aliments .form-group input[type="submit"]').val('Modifier');
   $('#nom-aliment').val(nom);
   $('#categorie-select').val(categorie_id);
+  changementAlimentContenu();
 }
 
 function handleSubmitFormAliment(event) {
@@ -190,15 +417,27 @@ function handleSubmitFormAliment(event) {
   }
 
   if (id !== '') {
-    document.cookie = 'idUpdateAliment=; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+    document.cookie = 'idUpdateAliment=; Max-Age=0';
     updateAliment(id, nom, categorie_id);
   } else {
-    $(document).find('.form-group input[type="submit"]').text('Ajouter');
     createAliment(nom, categorie_id);
   }
 }
 
+function retour() {
+  document.cookie = 'idUpdateAliment=; Max-Age=0';
+  changementAlimentContenu();
+}
+
+function handleAllAlimentButton() {
+  $('.aliments h2').text('Ajouter un aliment');
+  $(document)
+    .find('.aliments .form-group input[type="submit"]')
+    .text('Ajouter');
+  changementAlimentContenu();
+}
+
 $(document).ready(function () {
-  createTbody();
+  createTBody();
   createOptionsCategories();
 });

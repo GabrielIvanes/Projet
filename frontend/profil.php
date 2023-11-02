@@ -95,7 +95,7 @@ echo '
         </div>
     </form>
     <div class="error-message"></div>
-    <div class="retour" onclick="gobackToLogIn();">Retour</div>
+    <div class="retour" onclick="goBackToLogIn();">Retour</div>
 </div>
 ';
 
@@ -112,7 +112,6 @@ echo '
             <div class="nom-utilisateur"></div>
         </div>
         <div>
-            <div class="label">Mot de passe :</div>
             <div class="password">Modifier votre mot de passe : <button><i class="fa-solid fa-pen-to-square"></i></button></div>
         </div>
         <div>
@@ -133,13 +132,13 @@ echo '
                 <div class="age"></div>
             </div>
         </div>
-    
         <div class="pratique-sportive-wrapper">
             <div class="label">Pratique sportive :</div>
             <div class="pratique-sportive"></div>
         </div>
-        <div class="modifier-wrapper">
-            <button class="modifier">Modifier</button>
+        <div class="button-wrapper">
+            <button class="modifier" onclick="handleModifierParamUtilisateur();">Modifier</button>
+            <button class="supprimer" onclick="deleteUtilisateur();">Supprimer</button>
         </div>
     </form>
 </div>

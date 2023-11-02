@@ -9,10 +9,10 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 $data = json_decode(file_get_contents("php://input"));
 
-if(!empty($data->id_aliment) ) {
-    $id = $data->id_aliment;
+if(!empty($data->id_utilisateur) ) {
+    $id = $data->id_utilisateur;
 
-    $sql = "DELETE FROM ALIMENT WHERE ID = :id";
+    $sql = "DELETE FROM UTILISATEUR WHERE ID = :id";
 
     $request = $pdo->prepare($sql);
     $id = htmlspecialchars(strip_tags($id));
@@ -21,16 +21,16 @@ if(!empty($data->id_aliment) ) {
     if ($request->execute()) {
          http_response_code(200);
   
-        echo json_encode(array("message" => `L'aliment numéro $id a bien été supprimé.`));
+        echo json_encode(array("message" => `L'utilisateur numéro $id a bien été supprimé.`));
     } else {
         http_response_code(503);
   
-        echo json_encode(array("message" => "La suppression de l'aliment n'est pas possible."));
+        echo json_encode(array("message" => "La suppression de l'utilisateur n'est pas possible."));
     }
 } else {
     http_response_code(400);
 
-    echo json_encode(array("message" => "Le champ demandé n'est pas renseigné."));
+    echo json_encode(array("message" => "Le champs demandé n'est pas renseigné."));
 }
   
 ?>

@@ -104,7 +104,7 @@ create table UTILISATEUR
    NOM_UTILISATEUR      varchar(50) not null,
    EMAIL                varchar(50) not null,
    PASSWORD             varchar(50) not null,
-   SEXE                 bool not null,
+   SEXE                 int not null,
    AGE                  int not null,
    POIDS                decimal not null,
    TAILLE               decimal not null,

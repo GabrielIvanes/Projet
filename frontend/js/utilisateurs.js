@@ -52,6 +52,66 @@ async function createUtilisateur(
   }
 }
 
+async function updateUtilisateur(
+  id,
+  pratique_sportive,
+  nom_utilisateur,
+  email,
+  sexe,
+  age,
+  poids,
+  taille
+) {
+  const data = {
+    id,
+    pratique_sportive,
+    nom_utilisateur,
+    email,
+    sexe,
+    age,
+    poids,
+    taille,
+  };
+
+  try {
+    await $.ajax({
+      url: `${serverUrlUser}/updateUtilisateur.php`,
+      method: 'POST',
+      data: JSON.stringify(data),
+      contentType: 'application/json',
+    });
+
+    displayParamUtilisateur(id);
+    $('.inscription-wrapper .form-group.password').css('display', 'block');
+    $('.inscription-wrapper .form-group.password').prop('required', true);
+    $('.inscription-wrapper input[type="submit"]').val('Sinscrire');
+    $('.inscription-wrapper').css('display', 'none');
+    $('.connexion-wrapper').css('display', 'none');
+    $('.parametre-wrapper').css('display', 'flex');
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function deleteUtilisateur() {
+  const data = {
+    id_utilisateur: JSON.parse(window.localStorage.getItem('idUserImm')),
+  };
+
+  try {
+    await $.ajax({
+      url: `${serverUrlUser}/deleteUtilisateur.php`,
+      method: 'DELETE',
+      data: JSON.stringify(data),
+      contentType: 'application/json',
+    });
+
+    seDeconnecter();
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 async function connexionUtilisateur(email, password) {
   try {
     const data = {
@@ -67,7 +127,9 @@ async function connexionUtilisateur(email, password) {
     });
     const id = reponse.id;
     window.localStorage.setItem('idUserImm', id);
-    paramUtilisateur(id);
+    displayParamUtilisateur(id);
+    $('#email-connexion').val('');
+    $('#password-connexion').val('');
     $('.inscription-wrapper').css('display', 'none');
     $('.connexion-wrapper').css('display', 'none');
     $('.parametre-wrapper').css('display', 'flex');
@@ -101,44 +163,58 @@ async function paramUtilisateur(id) {
       contentType: 'application/json',
     });
 
-    const {
-      AGE: age,
-      EMAIL: email,
-      ID: _,
-      NOM_UTILISATEUR: nom_utilisateur,
-      PASSWORD: password,
-      POIDS: poids,
-      PRA_ID: pratique_sportive_id,
-      SEXE: sexe,
-      TAILLE: taille,
-    } = reponse.utilisateur;
-
-    const pratiqueSportive = await getAllPratiqueSportive();
-
-    $('.inscription-wrapper').css('display', 'none');
-    $('.connexion-wrapper').css('display', 'none');
-    $('.parametre-wrapper').css('display', 'flex');
-
-    $('.parametre .email').text(email);
-    $('.parametre .nom-utilisateur').text(nom_utilisateur);
-    $('.parametre .sexe').text(sexe === 0 ? 'Masculin' : 'Féminin');
-    $('.parametre .poids').text(`${poids} kg`);
-    $('.parametre .taille').text(`${taille} cm`);
-    $('.parametre .age').text(`${age} ans`);
-
-    $('.parametre .pratique-sportive').text(
-      pratiqueSportive.find((prat) => prat.id === pratique_sportive_id).nom
-    );
-    $('.nav-user-bottom').css('display', 'block');
-    $('.nav-user-nom').text(nom_utilisateur);
+    return reponse.utilisateur;
   } catch (err) {
-    console.error(err);
     seDeconnecter();
+    console.error(err);
   }
+}
+
+async function displayParamUtilisateur(id) {
+  const utilisateur = await paramUtilisateur(id);
+
+  const pratiqueSportive = await getAllPratiqueSportive();
+
+  $('.inscription-wrapper').css('display', 'none');
+  $('.connexion-wrapper').css('display', 'none');
+  $('.parametre-wrapper').css('display', 'flex');
+
+  $('.parametre .email').text(utilisateur.EMAIL);
+  $('.parametre .nom-utilisateur').text(utilisateur.NOM_UTILISATEUR);
+  $('.parametre .sexe').text(
+    parseInt(utilisateur.SEXE) === 0 ? 'Masculin' : 'Féminin'
+  );
+  $('.parametre .poids').text(`${utilisateur.POIDS} kg`);
+  $('.parametre .taille').text(`${utilisateur.TAILLE} cm`);
+  $('.parametre .age').text(`${utilisateur.AGE} ans`);
+
+  $('.parametre .pratique-sportive').text(
+    pratiqueSportive.find((prat) => prat.id === utilisateur.PRA_ID).nom
+  );
+  $('.nav-user-bottom').css('display', 'block');
+  $('.nav-user-nom').text(utilisateur.NOM_UTILISATEUR);
+}
+
+function seDeconnecter() {
+  window.localStorage.clear('idUserImm');
+  $('.inscription-wrapper').css('display', 'none');
+  $('.connexion-wrapper').css('display', 'flex');
+  $('.parametre-wrapper').css('display', 'none');
+  $('.nav-user-bottom').css('display', 'none');
+}
+
+function goBackToLogIn() {
+  $('.inscription-wrapper').css('display', 'none');
+  $('.connexion-wrapper').css('display', 'flex');
+  $('.parametre-wrapper').css('display', 'none');
+  $('.nav-user-bottom').css('display', 'none');
+  $('.retour').css('display', 'none');
 }
 
 function handleSubmitFormUtilisateur(event) {
   event.preventDefault();
+
+  const jsonId = window.localStorage.getItem('idUserImm');
 
   const email = $('#email-inscription').val();
   const nom_utilisateur = $('#nom-utilisateur').val();
@@ -149,25 +225,30 @@ function handleSubmitFormUtilisateur(event) {
   const age = $('#age').val();
   const pratique_sportive = $('input[name="pratique-sportive"]:checked').val();
 
-  console.log(email);
-  console.log(nom_utilisateur);
-  console.log(password);
-  console.log(poids);
-  console.log(sexe);
-  console.log(taille);
-  console.log(age);
-  console.log(pratique_sportive);
-
-  createUtilisateur(
-    pratique_sportive,
-    nom_utilisateur,
-    email,
-    password,
-    sexe,
-    age,
-    poids,
-    taille
-  );
+  if (jsonId) {
+    const id = JSON.parse(jsonId);
+    updateUtilisateur(
+      id,
+      pratique_sportive,
+      nom_utilisateur,
+      email,
+      sexe,
+      age,
+      poids,
+      taille
+    );
+  } else {
+    createUtilisateur(
+      pratique_sportive,
+      nom_utilisateur,
+      email,
+      password,
+      sexe,
+      age,
+      poids,
+      taille
+    );
+  }
 }
 
 function handleConnexionFormUtilisateur(event) {
@@ -179,19 +260,34 @@ function handleConnexionFormUtilisateur(event) {
   connexionUtilisateur(email, password);
 }
 
-function seDeconnecter() {
-  window.localStorage.clear('idUserImm');
-  $('.inscription-wrapper').css('display', 'none');
-  $('.connexion-wrapper').css('display', 'flex');
-  $('.parametre-wrapper').css('display', 'none');
-  $('.nav-user-bottom').css('display', 'none');
-}
+async function handleModifierParamUtilisateur() {
+  const id = JSON.parse(window.localStorage.getItem('idUserImm'));
 
-function gobackToLogIn() {
-  $('.inscription-wrapper').css('display', 'none');
-  $('.connexion-wrapper').css('display', 'flex');
+  const utilisateur = await paramUtilisateur(id);
+
+  $('.inscription-wrapper #email-inscription').val(utilisateur.EMAIL);
+  $('.inscription-wrapper #nom-utilisateur').val(utilisateur.NOM_UTILISATEUR);
+  $(
+    `.inscription-wrapper input[name="sexe"][value='${utilisateur.SEXE}']`
+  ).prop('checked', true);
+
+  $('.inscription-wrapper .form-group.password input').prop('required', false);
+  $('.inscription-wrapper .form-group.password').css('display', 'none');
+
+  $('.inscription-wrapper #poids').val(`${utilisateur.POIDS}`);
+  $('.inscription-wrapper #taille').val(`${utilisateur.TAILLE}`);
+  $('.inscription-wrapper #age').val(`${utilisateur.AGE}`);
+  $(
+    `.inscription-wrapper input[name="pratique-sportive"][value='${utilisateur.PRA_ID}']`
+  ).prop('checked', true);
+
+  $('.inscription-wrapper > h1').text(
+    "Modifier les paramètres de l'utilisateur"
+  );
+  $('.inscription-wrapper input[type="submit"]').val('Modifier');
+  $('.inscription-wrapper').css('display', 'flex');
+  $('.connexion-wrapper').css('display', 'none');
   $('.parametre-wrapper').css('display', 'none');
-  $('.nav-user-bottom').css('display', 'none');
   $('.retour').css('display', 'none');
 }
 
@@ -199,8 +295,8 @@ $(document).ready(function () {
   const id = window.localStorage.getItem('idUserImm');
 
   if (id) {
-    paramUtilisateur(JSON.parse(id));
+    displayParamUtilisateur(JSON.parse(id));
   } else {
-    gobackToLogIn();
+    goBackToLogIn();
   }
 });

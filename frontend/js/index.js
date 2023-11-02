@@ -24,8 +24,22 @@ function changementProfilContenu() {
     inscription.css('display', 'none');
     $('.retour').css('display', 'none');
   } else {
+    $('.inscription-wrapper input[type="submit"]').text("S'inscrire");
     connexion.css('display', 'none');
     inscription.css('display', 'flex');
     $('.retour').css('display', 'block');
+  }
+}
+
+function changementAlimentContenu() {
+  const ajoutAliment = $(document).find('.aliments .ajout-aliment');
+  const datatableAliment = $(document).find('.aliments .table-wrapper');
+
+  if (datatableAliment.css('display') === 'none') {
+    datatableAliment.css('display', 'flex');
+    ajoutAliment.css('display', 'none');
+  } else {
+    datatableAliment.css('display', 'none');
+    ajoutAliment.css('display', 'flex');
   }
 }
