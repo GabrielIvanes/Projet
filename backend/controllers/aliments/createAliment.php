@@ -13,6 +13,7 @@ if(!empty($data->categorie_id) && !empty($data->nom)){
     $catId = $data->categorie_id;
     $nom = $data->nom;
     
+    
     $sql = 'INSERT INTO ALIMENT(CAT_ID, NOM) VALUES(:categorie_id, :nom)';
 
     $request = $pdo->prepare($sql);
