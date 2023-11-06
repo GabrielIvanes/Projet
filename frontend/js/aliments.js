@@ -264,8 +264,8 @@ async function getNutrimentsAliment(alimentId) {
 //     catNom,
 //     ...nutrimentsCol,
 //     `
-//         <button onclick="onClickUpdate(event, ${aliment.id});"><i class='fas fa-edit icon'></i></button>
-//         <button onclick="onClickDelete(event, ${aliment.id});"><i class='fas fa-trash icon'></i></button>`,
+//         <button onclick="onClickUpdateAliment(event, ${aliment.id});"><i class='fas fa-edit icon'></i></button>
+//         <button onclick="onClickDeleteAliment(event, ${aliment.id});"><i class='fas fa-trash icon'></i></button>`,
 //   ]);
 
 //   tableAliments.draw();
@@ -316,8 +316,8 @@ async function createTBody() {
           catNom,
           ...nutrimentsCol,
           `
-            <button onclick="onClickUpdate(event, ${aliment.id});"><i class='fas fa-edit icon'></i></button>
-            <button onclick="onClickDelete(event, ${aliment.id});"><i class='fas fa-trash icon'></i></button>`,
+            <button class="operations" onclick="onClickUpdateAliment(event, ${aliment.id});"><i class='fas fa-edit icon'></i></button>
+            <button class="operations" onclick="onClickDeleteAliment(event, ${aliment.id});"><i class='fas fa-trash icon'></i></button>`,
         ];
       })
     );
@@ -359,12 +359,12 @@ async function createHeadOfTable() {
   thead.append(th);
 }
 
-function onClickDelete(event, id) {
+function onClickDeleteAliment(event, id) {
   event.preventDefault();
   deleteNutrimentsAliment(id);
 }
 
-async function onClickUpdate(event, id) {
+async function onClickUpdateAliment(event, id) {
   event.preventDefault();
 
   document.cookie = `idUpdateAliment=${id}`;
@@ -424,8 +424,21 @@ function handleSubmitFormAliment(event) {
   }
 }
 
-function retour() {
+async function retour() {
   document.cookie = 'idUpdateAliment=; Max-Age=0';
+
+  const nutriments = await getAllNutriments();
+  for (const nutriment of nutriments) {
+    let nutrimentInput = '';
+    if (nutriment.nom === 'Protéines') {
+      nutrimentInput = $('#proteines-aliment');
+    } else {
+      nutrimentInput = $(`#${nutriment.nom.toLowerCase()}-aliment`);
+    }
+    nutrimentInput.val('');
+  }
+  $('#nom-aliment').val('');
+  $('#categorie-select').val('');
   changementAlimentContenu();
 }
 

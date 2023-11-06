@@ -22,12 +22,10 @@ function changementProfilContenu() {
   if (connexion.css('display') === 'none') {
     connexion.css('display', 'flex');
     inscription.css('display', 'none');
-    $('.retour').css('display', 'none');
   } else {
     $('.inscription-wrapper input[type="submit"]').text("S'inscrire");
     connexion.css('display', 'none');
     inscription.css('display', 'flex');
-    $('.retour').css('display', 'block');
   }
 }
 
@@ -41,5 +39,18 @@ function changementAlimentContenu() {
   } else {
     datatableAliment.css('display', 'none');
     ajoutAliment.css('display', 'flex');
+  }
+}
+
+function changementJournalContenu() {
+  const ajoutJournal = $(document).find('.journal .ajout-journal');
+  const datatableJournal = $(document).find('.journal .table-journal-wrapper');
+
+  if (datatableJournal.css('display') === 'none') {
+    datatableJournal.css('display', 'flex');
+    ajoutJournal.css('display', 'none');
+  } else {
+    datatableJournal.css('display', 'none');
+    ajoutJournal.css('display', 'flex');
   }
 }

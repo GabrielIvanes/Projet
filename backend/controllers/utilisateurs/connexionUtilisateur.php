@@ -14,15 +14,13 @@ if (!empty($data->email) && !empty($data->password)) {
     $email = $data->email;
     $password = $data->password;
 
-    $sql = 'SELECT * FROM UTILISATEUR WHERE EMAIL = :email AND PASSWORD = :password';
+    $sql = 'SELECT ID, PASSWORD FROM UTILISATEUR WHERE EMAIL = :email';
 
     $request = $pdo->prepare($sql);
 
     $email = htmlspecialchars(strip_tags($email));
-    $password = htmlspecialchars(strip_tags($password));
 
     $request->bindParam(":email", $email);
-    $request->bindParam(":password", $password);
 
     $request->execute();
 
@@ -32,9 +30,17 @@ if (!empty($data->email) && !empty($data->password)) {
         $row = $request->fetch(PDO::FETCH_ASSOC);
         extract($row);
 
-        http_response_code(201);
+        if ($PASSWORD === $password) {
+            http_response_code(201);
   
-        echo json_encode(array("message" => "L'utilisateur $ID a été trouvé.", "id" => $ID));
+            echo json_encode(array("message" => "L'utilisateur $ID a été trouvé.", "id" => $ID));
+        } else {
+            http_response_code(400);
+        
+            echo json_encode(array("message"=> "Mauvais email ou mot de passe."));
+        }
+
+        
     } else {
         http_response_code(400);
         

@@ -95,7 +95,7 @@ echo '
         </div>
     </form>
     <div class="error-message"></div>
-    <div class="retour" onclick="goBackToLogIn();">Retour</div>
+    <div class="retour" onclick="goBack();">Retour</div>
 </div>
 ';
 

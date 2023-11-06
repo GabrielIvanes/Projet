@@ -128,6 +128,7 @@ async function connexionUtilisateur(email, password) {
     const id = reponse.id;
     window.localStorage.setItem('idUserImm', id);
     displayParamUtilisateur(id);
+    getBesoinEnergetiqueJournalier();
     $('#email-connexion').val('');
     $('#password-connexion').val('');
     $('.inscription-wrapper').css('display', 'none');
@@ -197,18 +198,41 @@ async function displayParamUtilisateur(id) {
 
 function seDeconnecter() {
   window.localStorage.clear('idUserImm');
+  resetProfil();
   $('.inscription-wrapper').css('display', 'none');
   $('.connexion-wrapper').css('display', 'flex');
   $('.parametre-wrapper').css('display', 'none');
   $('.nav-user-bottom').css('display', 'none');
 }
 
-function goBackToLogIn() {
-  $('.inscription-wrapper').css('display', 'none');
-  $('.connexion-wrapper').css('display', 'flex');
-  $('.parametre-wrapper').css('display', 'none');
-  $('.nav-user-bottom').css('display', 'none');
-  $('.retour').css('display', 'none');
+function resetProfil() {
+  $('.inscription-wrapper > h1').text("S'inscrire");
+  $('.inscription-wrapper input[type="submit"]').val('Ajouter');
+  $('#email-inscription').val('');
+  $('#email-connexion').val('');
+  $('#nom-utilisateur').val('');
+  $('#password-inscription').val('');
+  $('#password-connexion').val('');
+  $('input[name="sexe"]').prop('checked', false);
+  $('#poids').val('');
+  $('#taille').val('');
+  $('#age').val('');
+  $('input[name="pratique-sportive"]').prop('checked', false);
+}
+
+function goBack() {
+  if ($('.inscription-wrapper input[type="submit"]').val() === 'Modifier') {
+    $('.inscription-wrapper').css('display', 'none');
+    $('.connexion-wrapper').css('display', 'none');
+    $('.parametre-wrapper').css('display', 'flex');
+  } else {
+    $('.inscription-wrapper').css('display', 'none');
+    $('.connexion-wrapper').css('display', 'flex');
+    $('.parametre-wrapper').css('display', 'none');
+    $('.nav-user-bottom').css('display', 'none');
+    $('#email-connexion').val('');
+    $('#password-connexion').val('');
+  }
 }
 
 function handleSubmitFormUtilisateur(event) {
@@ -288,7 +312,6 @@ async function handleModifierParamUtilisateur() {
   $('.inscription-wrapper').css('display', 'flex');
   $('.connexion-wrapper').css('display', 'none');
   $('.parametre-wrapper').css('display', 'none');
-  $('.retour').css('display', 'none');
 }
 
 $(document).ready(function () {
@@ -297,6 +320,6 @@ $(document).ready(function () {
   if (id) {
     displayParamUtilisateur(JSON.parse(id));
   } else {
-    goBackToLogIn();
+    goBack();
   }
 });

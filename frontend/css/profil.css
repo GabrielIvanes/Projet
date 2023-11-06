@@ -83,20 +83,6 @@
 .creer-compte:hover {
   text-decoration: underline;
 }
-.retour {
-  position: absolute;
-  top: 30px;
-  left: 50px;
-  padding: 5px 10px;
-  color: var(--card-color);
-  border: 1px solid var(--side-color);
-  background-color: var(--side-color);
-}
-.retour:hover {
-  color: var(--side-color);
-  background-color: var(--card-color);
-  cursor: pointer;
-}
 .profil .error-message {
   color: red;
 }

@@ -31,6 +31,8 @@ echo '
                 <span class="nav-user-nom"></span>
                 <span> !</span>
             </div>
+            <div>Besoins énergétiques du jour:</div>
+            <div class="besoin-energetique-journalier"></div>
             <button onclick="seDeconnecter();">Se déconnecter</button>
         </div>
     </nav>

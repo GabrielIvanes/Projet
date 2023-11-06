@@ -27,16 +27,6 @@
 .aliments .table-wrapper > div {
   width: calc(100% - 20px);
 }
-.aliments #table-aliments button {
-  background-color: transparent;
-  border: none;
-  margin: 0 10px;
-  font-size: 15px;
-  cursor: pointer;
-}
-.aliments #table-aliments button:first-of-type {
-  margin-left: 0;
-}
 .aliments #table-aliments th:nth-child(3),
 .aliments #table-aliments td:nth-child(3) {
   width: 200px;
@@ -46,7 +36,7 @@
   max-width: 200px;
   word-wrap: break-word;
 }
-.aliments .table-wrapper button {
+.aliments .table-wrapper > button {
   margin-top: 20px;
   cursor: pointer;
   background-color: var(--side-color);

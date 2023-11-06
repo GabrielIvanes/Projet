@@ -1,6 +1,7 @@
 @import url('./nav.css');
 @import url('./profil.css');
 @import url('./aliments.css');
+@import url('./journal.css');
 
 :root {
   --main-color: #f0e7bf;
@@ -53,4 +54,28 @@
   color: var(--main-color);
   border: none;
   font-size: 20px;
+}
+.retour {
+  position: absolute;
+  top: 30px;
+  left: 50px;
+  padding: 5px 10px;
+  color: var(--card-color);
+  border: 1px solid var(--side-color);
+  background-color: var(--side-color);
+}
+.retour:hover {
+  color: var(--side-color);
+  background-color: var(--card-color);
+  cursor: pointer;
+}
+table .operations {
+  background-color: transparent;
+  border: none;
+  margin: 0 10px;
+  font-size: 15px;
+  cursor: pointer;
+}
+table .operations:first-child {
+  margin-left: 0;
 }
