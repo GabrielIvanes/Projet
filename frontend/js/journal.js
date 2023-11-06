@@ -15,6 +15,7 @@ const tableJournal = $('#table-journal').DataTable({
 async function createTBodyJournal() {
   tableJournal.clear();
   const journal = await getAllEntreeUtilisateur();
+  console.log(journal);
   journal.map((entree) => {
     tableJournal.row.add({
       Id: entree.id,
@@ -127,6 +128,11 @@ function handleSubmitFormJournal(event) {
 function convertToEnglishDate(dateFr) {
   const [jour, mois, annee] = dateFr.split('/');
   return `${annee}-${mois}-${jour}`;
+}
+
+function convertToEnglishDateYearAndMonth(dateFr) {
+  const [jour, mois, annee] = dateFr.split('/');
+  return `${annee}-${mois}`;
 }
 
 async function getOneEntree(entreeId) {
@@ -298,6 +304,118 @@ async function getAllEntreeUtilisateur() {
   }
 }
 
+async function createOptionsCategoriesFiltre() {
+  const select = $(document).find('.list-categories-filtre');
+  const categories = await getAllCat();
+  if (categories.length > 0) {
+    const defaultOption = $('<option>')
+      .val('')
+      .text('Choisir une catégorie')
+      .attr('disabled', 'disabled')
+      .attr('selected', 'selected');
+    select.append(defaultOption);
+    for (const categorie of categories) {
+      const option = $('<option>')
+        .val(categorie.nom)
+        .text(categorie.nom)
+        .on('click', function () {
+          filtreCategorie(categorie.nom);
+        });
+      select.append(option);
+    }
+  }
+}
+
+function clearActiveFiltre() {
+  $('.filtres-date-wrapper > div').removeClass('active-filtre');
+}
+
+function filtreDate(filtre, event) {
+  clearActiveFiltre();
+  event.target.classList.add('active-filtre');
+  let selectedDate = '';
+  switch (filtre) {
+    case 'ajd':
+      selectedDate = convertToEnglishDate(new Date().toLocaleDateString());
+      tableJournal.column(4).search(selectedDate, true, false).draw();
+      break;
+    case 'semaine':
+      today = new Date();
+      const unJourAvant = convertToEnglishDate(
+        new Date(today.setDate(today.getDate() - 1)).toLocaleDateString()
+      );
+      const deuxJourAvant = convertToEnglishDate(
+        new Date(today.setDate(today.getDate() - 1)).toLocaleDateString()
+      );
+      const troisJourAvant = convertToEnglishDate(
+        new Date(today.setDate(today.getDate() - 1)).toLocaleDateString()
+      );
+      const quatreJourAvant = convertToEnglishDate(
+        new Date(today.setDate(today.getDate() - 1)).toLocaleDateString()
+      );
+      const cinqJourAvant = convertToEnglishDate(
+        new Date(today.setDate(today.getDate() - 1)).toLocaleDateString()
+      );
+      const sixJourAvant = convertToEnglishDate(
+        new Date(today.setDate(today.getDate() - 1)).toLocaleDateString()
+      );
+      const septJourAvant = convertToEnglishDate(
+        new Date(today.setDate(today.getDate() - 1)).toLocaleDateString()
+      );
+      today = convertToEnglishDate(new Date().toLocaleDateString());
+      tableJournal
+        .column(4)
+        .search(
+          today +
+            '|' +
+            unJourAvant +
+            '|' +
+            deuxJourAvant +
+            '|' +
+            troisJourAvant +
+            '|' +
+            quatreJourAvant +
+            '|' +
+            cinqJourAvant +
+            '|' +
+            sixJourAvant +
+            '|' +
+            septJourAvant,
+          true,
+          false
+        )
+        .draw();
+      break;
+    case 'mois':
+      selectedDate = convertToEnglishDateYearAndMonth(
+        new Date().toLocaleDateString()
+      );
+      tableJournal.column(4).search(selectedDate, true, false).draw();
+      break;
+    case 'annee':
+      selectedDate = new Date().getFullYear();
+
+      tableJournal.column(4).search(selectedDate, true, false).draw();
+      break;
+    case 'tout':
+      tableJournal.column(4).search(selectedDate, true, false).draw();
+      break;
+  }
+}
+
+function filtreCategorie() {
+  const catNom = $('.list-categories-filtre').val();
+  tableJournal.column(2).search(catNom, true, false).draw();
+}
+
+function clearFiltres() {
+  clearActiveFiltre();
+  tableJournal.column(4).search('', true, false).draw();
+  $('.filtres-date-wrapper div:last-child').addClass('active-filtre');
+  tableJournal.column(2).search('', true, false).draw();
+  $('.list-categories-filtre').val('');
+}
+
 function retourJournal() {
   document.cookie = 'idUpdateEntree=; Max-Age=0';
   $('.journal > h1').text('Journal');
@@ -315,8 +433,6 @@ function addOneEntree() {
 }
 
 $(document).ready(function () {
-  // const selectedDate = '2023-11';
-  // tableJournal.column(3).search(selectedDate, true, false).draw();
   const input = $('#aliments-input');
   const divAutocomplete = $('#list-aliment');
   input.on('input', function () {
@@ -327,6 +443,8 @@ $(document).ready(function () {
   if (utilisateurIdJSON) {
     createTBodyJournal();
   }
+  createOptionsCategoriesFiltre();
+
   $(document).on('click', function (event) {
     if (!input.is(event.target) && !divAutocomplete.is(event.target)) {
       divAutocomplete.hide();

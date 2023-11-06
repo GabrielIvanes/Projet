@@ -45,12 +45,15 @@ function changementAlimentContenu() {
 function changementJournalContenu() {
   const ajoutJournal = $(document).find('.journal .ajout-journal');
   const datatableJournal = $(document).find('.journal .table-journal-wrapper');
+  const filtres = $('.filtres');
 
   if (datatableJournal.css('display') === 'none') {
     datatableJournal.css('display', 'flex');
     ajoutJournal.css('display', 'none');
+    filtres.css('display', 'flex');
   } else {
     datatableJournal.css('display', 'none');
+    filtres.css('display', 'none');
     ajoutJournal.css('display', 'flex');
   }
 }
