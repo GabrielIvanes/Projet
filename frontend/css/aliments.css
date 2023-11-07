@@ -65,3 +65,34 @@
 #formAddAliment > .form-group:nth-last-child(2) input {
   width: 200px;
 }
+.verification-suppression-aliment {
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.verification-suppression-aliment > div:last-of-type {
+  margin-top: 10px;
+}
+.verification-suppression-aliment
+  > div:last-of-type
+  .annuler-suppression-aliment {
+  cursor: pointer;
+  padding: 5px 10px;
+  background-color: var(--side-color);
+  color: var(--main-color);
+  border: 1px solid var(--side-color);
+}
+.verification-suppression-aliment
+  > div:last-of-type
+  .valider-suppression-aliment {
+  padding: 5px 10px;
+  cursor: pointer;
+  background-color: red;
+  color: white;
+  border: 1px solid red;
+}
+.verification-suppression-aliment {
+  display: none;
+}

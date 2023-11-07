@@ -14,13 +14,14 @@ echo '
         <div class="form-group password">
             <label for="password">Mot de Passe :</label>
             <input type="password" id="password-connexion" class="password-input" name="password">
-            <i class="fa-solid fa-eye icon" onclick="formUserEyeClick();"></i>
+            <i class="fa-solid fa-eye icon" onclick="formUserEyeClick(\'connexion-wrapper\');"></i>
         </div>
         <div class="form-group">
             <input type="submit" value="Se connecter">
         </div>
     </form>
     <div class="creer-compte" onclick="changementProfilContenu();">Créer un compte</div>
+    <div class="error-message-connexion"></div>
 </div>
 ';
 
@@ -40,7 +41,7 @@ echo '
         <div class="form-group password">
             <label for="password">Mot de Passe :</label>
             <input type="password" id="password-inscription" class="password-input" name="password" required>
-            <i class="fa-solid fa-eye icon" onclick="formUserEyeClick();"></i>
+            <i class="fa-solid fa-eye icon" onclick="formUserEyeClick(\'inscription-wrapper\');"></i>
         </div>
         <div class="form-group">
             <label for="sexe">Sexe :</label>
@@ -112,7 +113,7 @@ echo '
             <div class="nom-utilisateur"></div>
         </div>
         <div>
-            <div class="password">Modifier votre mot de passe : <button><i class="fa-solid fa-pen-to-square"></i></button></div>
+            <div class="password">Modifier votre mot de passe : <button onclick="handleModifierPassword();"><i class="fa-solid fa-pen-to-square"></i></button></div>
         </div>
         <div>
             <div class="label">Sexe :</div>
@@ -138,11 +139,40 @@ echo '
         </div>
         <div class="button-wrapper">
             <button class="modifier" onclick="handleModifierParamUtilisateur();">Modifier</button>
-            <button class="supprimer" onclick="deleteUtilisateur();">Supprimer</button>
+            <button class="supprimer" onclick="handleDeleteUtilisateur();">Supprimer</button>
         </div>
-    </form>
+    </div>
 </div>
 ';
+
+echo '<div class="profil modifier-password">
+    <h1>Modifiez votre mot de passe: </h1>
+    <form action="" id="update-password-form" onsubmit="handleSubmitFormUpdatePassword(event);">
+        <div class="form-group old-password-wrapper password">
+            <label for="old-password">Ancien mot de Passe :</label>
+            <input type="password" id="old-password" class="password-input" name="old-password" required>
+            <i class="fa-solid fa-eye icon" onclick="formUserEyeClick(\'old-password-wrapper\');"></i>
+        </div>
+        <div class="form-group new-password-wrapper password">
+            <label for="new-password">Nouveau mot de Passe :</label>
+            <input type="password" id="new-password" class="password-input" name="new-password" required>
+            <i class="fa-solid fa-eye icon" onclick="formUserEyeClick(\'new-password-wrapper\');"></i>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Modifier">
+        </div>
+    </form>
+    <div class="retour" onclick="goBack();">Retour</div>
+    <div class="error-message-modifier-password"></div>
+</div>';
+
+echo '<div class="verification-suppression">
+    <div>Êtes-vous sûr de vouloir supprimer cet utilisateur ?<br/>Cette action entraînera la suppression de son journal.</div>
+    <div>
+        <button class="annuler-suppression" onclick="handleVerificationDeleteUtilisateur(\'annuler\');">Annuler</button>
+        <button class="valider-suppression" onclick="handleVerificationDeleteUtilisateur(\'valider\');">Je suis sûr</button>
+    </div>
+</div>';
 
 require_once('footer.php');
 ?>

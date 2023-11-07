@@ -42,7 +42,6 @@ echo '<h1>Aliments</h1>';
                 </div>
             </div>
             <div class="form-group-row">
-                
                 <div class="form-group">
                     <label for="sucre">Sucre (en g): </label>
                     <input type="text" id="sucres-aliment" name="sucre" placeholder="g" maxLength="5" pattern="[0-9]+">
@@ -72,6 +71,14 @@ echo '<h1>Aliments</h1>';
         </form>
         <div class="retour" onclick="retour();">Retour</div>
   </div>
+
+   <div class="verification-suppression-aliment">
+    <div>Êtes vous sûr de vous supprimer cet aliment ?<br/>Cela entraînera la suppression des entrées du journal comportant cet aliment.</div>
+   <div>
+        <button class="annuler-suppression-aliment" onclick="handleVerificationDeleteAliment(\'annuler\');">Annuler</button>
+        <button class="valider-suppression-aliment" onclick="handleVerificationDeleteAliment(\'valider\');">Je suis sûr</button>
+    </div>
+    </div>
   
   
 </div>

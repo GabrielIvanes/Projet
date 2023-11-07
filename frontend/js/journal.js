@@ -226,6 +226,39 @@ async function deleteEntreeJournal(entreeId) {
   }
 }
 
+async function deleteJournalUtilisateur() {
+  const utilisateurId = JSON.parse(window.localStorage.getItem('idUserImm'));
+  try {
+    const data = {
+      utilisateurId,
+    };
+    await $.ajax({
+      url: `${serverUrlJournal}/deleteAllEntreeUtilisateur.php`,
+      method: 'DELETE',
+      data: JSON.stringify(data),
+      contentType: 'application/json',
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function deleteEntreesAliment(alimentId) {
+  const data = {
+    alimentId,
+  };
+  try {
+    await $.ajax({
+      url: `${serverUrlJournal}/deleteAllEntreeAliment.php`,
+      method: 'DELETE',
+      data: JSON.stringify(data),
+      contentType: 'application/json',
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 function isDateBeforeNow(date) {
   const today = new Date();
   const todayDatePart = today.toLocaleDateString();

@@ -119,7 +119,6 @@ async function deleteNutrimentsAliment(alimentId) {
   const data = {
     alimentId,
   };
-
   try {
     await $.ajax({
       url: `${serverUrlAliment}/deleteNutrimentsAliment.php`,
@@ -127,7 +126,6 @@ async function deleteNutrimentsAliment(alimentId) {
       data: JSON.stringify(data),
       contentType: 'application/json',
     });
-    deleteAliment(alimentId);
   } catch (err) {
     console.error(err);
   }
@@ -225,7 +223,6 @@ async function getNutrimentsAliment(alimentId) {
   const data = {
     alimentId,
   };
-
   try {
     const reponse = await $.ajax({
       url: `${serverUrlAliment}/getNutrimentsAliment.php`,
@@ -361,7 +358,29 @@ async function createHeadOfTable() {
 
 function onClickDeleteAliment(event, id) {
   event.preventDefault();
-  deleteNutrimentsAliment(id);
+  $('.verification-suppression-aliment').css('display', 'flex');
+  $('.table-wrapper').css('display', 'none');
+  document.cookie = `alimentIdDelete=${id}`;
+}
+
+async function handleVerificationDeleteAliment(verification) {
+  const cookies = document.cookie.split(';');
+  let alimentId = '';
+
+  for (const cookie of cookies) {
+    const [key, value] = cookie.split('=');
+    if (key === 'alimentIdDelete') {
+      alimentId = value;
+    }
+  }
+  document.cookie = 'alimentIdDelete=; Max-Age=0';
+  if (verification === 'valider') {
+    await deleteEntreesAliment(alimentId);
+    await deleteNutrimentsAliment(alimentId);
+    await deleteAliment(alimentId);
+  }
+  $('.verification-suppression-aliment').css('display', 'none');
+  $('.table-wrapper').css('display', 'flex');
 }
 
 async function onClickUpdateAliment(event, id) {
