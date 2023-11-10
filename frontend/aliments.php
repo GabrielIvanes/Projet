@@ -5,7 +5,7 @@ echo '<div class="main-contenu">';
 echo '<div class="aliments">';
 echo '<h1>Aliments</h1>';
  echo' 
-  <div class="table-wrapper">
+  <div class="display table-wrapper">
     <table id="table-aliments">
         <thead>
             <tr>
@@ -31,40 +31,43 @@ echo '<h1>Aliments</h1>';
                 <select name="categorie" id="categorie-select" required>
                 </select>
             </div>
+            <div class="form-group isLiquide-form">
+                <div for="isLiquide">Aliment liquide: </div>
+                <input type="checkbox" id="isLiquide-aliment" name="isLiquide">
+            </div>
             <div class="form-group-row">
                 <div class="form-group">
                     <label for="energie">Energie (en kcal): </label>
-                    <input type="text" id="energie-aliment" name="energie" placeholder="kcal" maxLength="5" pattern="[0-9]+">
+                    <input type="text" id="energie-aliment" name="energie" placeholder="pour 100 g" maxLength="5" pattern="^\d+(\.\d+)?$">
                 </div>
                 <div class="form-group">
                     <label for="gras">Gras (en g): </label>
-                    <input type="text" id="gras-aliment" name="gras" placeholder="g" maxLength="5" pattern="[0-9]+">
+                    <input type="text" id="gras-aliment" name="gras" placeholder="pour 100 g" maxLength="5" pattern="^\d+(\.\d+)?$">
                 </div>
             </div>
             <div class="form-group-row">
-                
                 <div class="form-group">
                     <label for="sucre">Sucre (en g): </label>
-                    <input type="text" id="sucres-aliment" name="sucre" placeholder="g" maxLength="5" pattern="[0-9]+">
+                    <input type="text" id="sucres-aliment" name="sucre" placeholder="pour 100 g" maxLength="5" pattern="^\d+(\.\d+)?$">
                 </div>
                 <div class="form-group">
                     <label for="sel">Sel (en g): </label>
-                    <input type="text" id="sel-aliment" name="sel" placeholder="g" maxLength="5" pattern="[0-9]+">
+                    <input type="text" id="sel-aliment" name="sel" placeholder="pour 100 g" maxLength="5" pattern="^\d+(\.\d+)?$">
                 </div>
             </div>
             <div class="form-group-row">
                 <div class="form-group">
                     <label for="fibre">Fibres (en g): </label>
-                    <input type="text" id="fibres-aliment" name="fibre" placeholder="g" maxLength="5" pattern="[0-9]+">
+                    <input type="text" id="fibres-aliment" name="fibre" placeholder="pour 100 g" maxLength="5" pattern="^\d+(\.\d+)?$">
                 </div>
                 <div class="form-group">
                     <label for="proteines">Protéines (en g): </label>
-                    <input type="text" id="proteines-aliment" name="proteines" placeholder="g" maxLength="5" pattern="[0-9]+">
+                    <input type="text" id="proteines-aliment" name="proteines" placeholder="pour 100 g" maxLength="5" pattern="^\d+(\.\d+)?$">
                 </div>
             </div>
             <div class="form-group">
                 <label for=fer">Fer (en g): </label>
-                <input type="text" id="fer-aliment" name="fer" placeholder="g" maxLength="5" pattern="[0-9]+">
+                <input type="text" id="fer-aliment" name="fer" placeholder="pour 100 g" maxLength="5" pattern="^\d+(\.\d+)?$">
             </div>
             <div class="form-group">
                 <input type="submit" value="Ajouter">
@@ -72,6 +75,14 @@ echo '<h1>Aliments</h1>';
         </form>
         <div class="retour" onclick="retour();">Retour</div>
   </div>
+
+   <div class="verification-suppression-aliment">
+    <div>Êtes vous sûr de vous supprimer cet aliment ?<br/>Cela entraînera la suppression des entrées du journal comportant cet aliment.</div>
+   <div>
+        <button class="annuler-suppression-aliment" onclick="handleVerificationDeleteAliment(\'annuler\');">Annuler</button>
+        <button class="valider-suppression-aliment" onclick="handleVerificationDeleteAliment(\'valider\');">Je suis sûr</button>
+    </div>
+    </div>
   
   
 </div>

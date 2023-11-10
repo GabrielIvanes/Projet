@@ -33,11 +33,12 @@ async function getBesoinEnergetiqueJournalier() {
         besoinEnergetiqueJournalier *= 1.8;
         break;
     }
-    const div = $('.besoin-energetique-journalier');
-    div.text(`${besoinEnergetiqueJournalier.toFixed(1)} kcal`);
+    return besoinEnergetiqueJournalier;
   }
 }
 
-$(document).ready(function () {
-  getBesoinEnergetiqueJournalier();
+$(document).ready(async function () {
+  const besoinEnergetiqueJournalier = await getBesoinEnergetiqueJournalier();
+  const div = $('.besoin-energetique-journalier');
+  div.text(`${besoinEnergetiqueJournalier.toFixed(1)} kcal`);
 });

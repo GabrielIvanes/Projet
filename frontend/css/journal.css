@@ -58,3 +58,31 @@
   border: none;
   font-size: 20px;
 }
+.journal .filtres {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 20px 20px 20px;
+}
+.journal .filtres .filtres-date-wrapper {
+  display: flex;
+}
+.journal .filtres .filtres-date-wrapper div {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid var(--side-color);
+  color: var(--side-color);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.journal .filtres .filtres-date-wrapper div:hover,
+.journal .filtres .filtres-date-wrapper div.active-filtre {
+  color: var(--main-color);
+  background-color: var(--side-color);
+}
+.effacer-filtre {
+  padding: 5px 10px;
+  color: var(--card-color);
+  border: 1px solid var(--side-color);
+  background-color: var(--side-color);
+  cursor: pointer;
+}

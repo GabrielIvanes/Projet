@@ -97,7 +97,6 @@ async function deleteUtilisateur() {
   const data = {
     id_utilisateur: JSON.parse(window.localStorage.getItem('idUserImm')),
   };
-
   try {
     await $.ajax({
       url: `${serverUrlUser}/deleteUtilisateur.php`,
@@ -105,7 +104,7 @@ async function deleteUtilisateur() {
       data: JSON.stringify(data),
       contentType: 'application/json',
     });
-
+    $('.verification-suppression').css('display', 'none');
     seDeconnecter();
   } catch (err) {
     console.error(err);
@@ -113,12 +112,12 @@ async function deleteUtilisateur() {
 }
 
 async function connexionUtilisateur(email, password) {
+  $('.error-message-connexion ').text('');
   try {
     const data = {
       email,
       password,
     };
-
     const reponse = await $.ajax({
       url: `${serverUrlUser}/connexionUtilisateur.php`,
       method: 'POST',
@@ -135,7 +134,8 @@ async function connexionUtilisateur(email, password) {
     $('.connexion-wrapper').css('display', 'none');
     $('.parametre-wrapper').css('display', 'flex');
   } catch (err) {
-    console.error(err);
+    if (err.responseJSON.message)
+      $('.error-message-connexion ').text(err.responseJSON.message);
   }
 }
 
@@ -199,10 +199,14 @@ async function displayParamUtilisateur(id) {
 function seDeconnecter() {
   window.localStorage.clear('idUserImm');
   resetProfil();
+  resetAliment();
+  resetJournal();
   $('.inscription-wrapper').css('display', 'none');
   $('.connexion-wrapper').css('display', 'flex');
   $('.parametre-wrapper').css('display', 'none');
   $('.nav-user-bottom').css('display', 'none');
+
+  window.location.href = `profil.php`;
 }
 
 function resetProfil() {
@@ -221,10 +225,15 @@ function resetProfil() {
 }
 
 function goBack() {
-  if ($('.inscription-wrapper input[type="submit"]').val() === 'Modifier') {
+  if (
+    $('.inscription-wrapper input[type="submit"]').val() === 'Modifier' ||
+    $('.modifier-password').css('display') === 'flex'
+  ) {
     $('.inscription-wrapper').css('display', 'none');
     $('.connexion-wrapper').css('display', 'none');
     $('.parametre-wrapper').css('display', 'flex');
+    $('#old-password').val('');
+    $('#new-password').val('');
   } else {
     $('.inscription-wrapper').css('display', 'none');
     $('.connexion-wrapper').css('display', 'flex');
@@ -232,6 +241,58 @@ function goBack() {
     $('.nav-user-bottom').css('display', 'none');
     $('#email-connexion').val('');
     $('#password-connexion').val('');
+  }
+}
+
+function handleModifierPassword() {
+  $('.parametre-wrapper').css('display', 'none');
+  $('.modifier-password').css('display', 'flex');
+}
+
+function handleSubmitFormUpdatePassword(event) {
+  event.preventDefault();
+  const old_password = $('#old-password').val();
+  const new_password = $('#new-password').val();
+  changementPassword(old_password, new_password);
+}
+
+async function changementPassword(old_password, new_password) {
+  try {
+    const utilisateurId = JSON.parse(window.localStorage.getItem('idUserImm'));
+    const utilisateur = await paramUtilisateur(utilisateurId);
+    const data = {
+      email: utilisateur.EMAIL,
+      password: old_password,
+    };
+    const reponse = await $.ajax({
+      url: `${serverUrlUser}/connexionUtilisateur.php`,
+      method: 'POST',
+      data: JSON.stringify(data),
+      contentType: 'application/json',
+    });
+    if (reponse.id) {
+      try {
+        const data = {
+          utilisateurId,
+          new_password,
+        };
+        await $.ajax({
+          url: `${serverUrlUser}/updatePassword.php`,
+          method: 'PUT',
+          data: JSON.stringify(data),
+          contentType: 'application/json',
+        });
+        $('#old-password').val('');
+        $('#new-password').val('');
+        $('.parametre-wrapper').css('display', 'flex');
+        $('.modifier-password').css('display', 'none');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  } catch (err) {
+    console.error(err);
+    $('.error-message-modifier-password').text('Mauvais mot de passe');
   }
 }
 
@@ -312,6 +373,21 @@ async function handleModifierParamUtilisateur() {
   $('.inscription-wrapper').css('display', 'flex');
   $('.connexion-wrapper').css('display', 'none');
   $('.parametre-wrapper').css('display', 'none');
+}
+
+function handleDeleteUtilisateur() {
+  $('.verification-suppression').css('display', 'flex');
+  $('.parametre-wrapper').css('display', 'none');
+}
+
+async function handleVerificationDeleteUtilisateur(verification) {
+  if (verification === 'valider') {
+    await deleteJournalUtilisateur();
+    await deleteUtilisateur();
+  } else {
+    $('.verification-suppression').css('display', 'none');
+    $('.parametre-wrapper').css('display', 'flex');
+  }
 }
 
 $(document).ready(function () {

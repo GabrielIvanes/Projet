@@ -29,6 +29,7 @@
     charset="utf8"
     src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"
   ></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 
 <body>

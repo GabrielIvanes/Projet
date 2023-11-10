@@ -57,6 +57,7 @@
 .profil .parametre .label {
   margin-bottom: 5px;
   font-size: 17px;
+  font-weight: bold;
 }
 .profil .parametre .pratique-sportive-wrapper > div {
   width: 100%;
@@ -74,7 +75,9 @@
   cursor: pointer;
 }
 .inscription-wrapper,
-.parametre-wrapper {
+.parametre-wrapper,
+.modifier-password,
+.verification-suppression {
   display: none;
 }
 .creer-compte {
@@ -83,6 +86,45 @@
 .creer-compte:hover {
   text-decoration: underline;
 }
-.profil .error-message {
+.profil .error-message,
+.error-message-connexion,
+.error-message-modifier-password {
   color: red;
+}
+.parametre-wrapper .password {
+  font-weight: bold;
+}
+.parametre-wrapper .password button {
+  cursor: pointer;
+  background-color: var(--side-color);
+  padding: 3px;
+  border: 1px solid var(--side-color);
+  border-radius: 4px;
+}
+.parametre-wrapper .password button i {
+  color: var(--main-color);
+}
+.verification-suppression > div:last-of-type {
+  margin-top: 10px;
+}
+.verification-suppression {
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.verification-suppression > div:last-of-type .annuler-suppression {
+  cursor: pointer;
+  padding: 5px 10px;
+  background-color: var(--side-color);
+  color: var(--main-color);
+  border: 1px solid var(--side-color);
+}
+.verification-suppression > div:last-of-type .valider-suppression {
+  padding: 5px 10px;
+  cursor: pointer;
+  background-color: red;
+  color: white;
+  border: 1px solid red;
 }

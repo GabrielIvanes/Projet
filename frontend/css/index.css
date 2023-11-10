@@ -2,6 +2,7 @@
 @import url('./profil.css');
 @import url('./aliments.css');
 @import url('./journal.css');
+@import url('./dashboard.css');
 
 :root {
   --main-color: #f0e7bf;

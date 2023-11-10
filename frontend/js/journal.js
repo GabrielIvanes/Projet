@@ -15,41 +15,23 @@ const tableJournal = $('#table-journal').DataTable({
 async function createTBodyJournal() {
   tableJournal.clear();
   const journal = await getAllEntreeUtilisateur();
+  console.log(journal);
   journal.map((entree) => {
     tableJournal.row.add({
       Id: entree.id,
       Aliment: entree.aliment,
       Catégorie: entree.cat,
-      Quantité: entree.quantite,
-      Date: add1Hour(entree.date),
+      Quantité:
+        parseInt(entree.isLiquide) === 1
+          ? `${entree.quantite} mL`
+          : `${entree.quantite} g`,
+      Date: entree.date,
       Opérations: `
             <button class="operations" onclick="onClickUpdateJournal(event, ${entree.id});"><i class='fas fa-edit icon'></i></button>
             <button class="operations" onclick="onClickDeleteJournal(event, ${entree.id});"><i class='fas fa-trash icon'></i></button>`,
     });
   });
   tableJournal.draw();
-}
-
-function add1Hour(date) {
-  date = new Date(date);
-  date.setHours(date.getHours() + 1);
-
-  const datePart = convertToEnglishDate(date.toLocaleDateString());
-  const heurePart = date.toLocaleTimeString();
-  const [heure, minute, _] = heurePart.split(':');
-
-  return `${datePart} ${heure}:${minute}`;
-}
-
-function remove1Hour(date) {
-  date = new Date(date);
-  date.setHours(date.getHours() - 1);
-
-  const datePart = convertToEnglishDate(date.toLocaleDateString());
-  const heurePart = date.toLocaleTimeString();
-  const [heure, minute, _] = heurePart.split(':');
-
-  return `${datePart} ${heure}:${minute}`;
 }
 
 async function getAutocompleteAliment(mot) {
@@ -82,8 +64,7 @@ async function createDivAutocomplete() {
         .on('click', function (event) {
           choisirAliment(event);
         })
-        .attr('data-id', aliment.id)
-        .attr('data-cat', aliment.categorie);
+        .attr('data-id', aliment.id);
       divAutocomplete.append(div);
     }
   }
@@ -94,8 +75,7 @@ function choisirAliment(event) {
   const input = $('#aliments-input');
   input
     .val(aliment.textContent)
-    .attr('data-id', aliment.getAttribute('data-id'))
-    .attr('data-cat', aliment.getAttribute('data-cat'));
+    .attr('data-id', aliment.getAttribute('data-id'));
 }
 
 function handleSubmitFormJournal(event) {
@@ -129,6 +109,11 @@ function convertToEnglishDate(dateFr) {
   return `${annee}-${mois}-${jour}`;
 }
 
+function convertToEnglishDateYearAndMonth(dateFr) {
+  const [jour, mois, annee] = dateFr.split('/');
+  return `${annee}-${mois}`;
+}
+
 async function getOneEntree(entreeId) {
   const data = {
     entreeId,
@@ -160,7 +145,7 @@ async function onClickUpdateJournal(event, entreeId) {
   $('#aliments-input').val(alimentNom);
   $('#aliments-input').attr('data-id', alimentId);
   $('#quantite-aliment-journal').val(quantite);
-  $('#date-aliment-journal').val(add1Hour(date));
+  $('#date-aliment-journal').val(date);
   changementJournalContenu();
 }
 
@@ -172,7 +157,7 @@ async function updateEntreeJournal(entreeId, alimentId, quantite, dateHeure) {
         entreeId,
         alimentId,
         quantite,
-        date: remove1Hour(dateHeure),
+        date: dateHeure,
       };
       await $.ajax({
         url: `${serverUrlJournal}/updateEntreeJournal.php`,
@@ -182,7 +167,7 @@ async function updateEntreeJournal(entreeId, alimentId, quantite, dateHeure) {
       });
       $('.journal > h1').text('Journal');
       $('#aliments-input').val('');
-      $('#aliments-input').removeAttr('data-id');
+      $('#aliments-input').attr('data-id', '');
       $('#quantite-aliment-journal').val('');
       $('.journal > h1').text('Journal');
       $('#date-aliment-journal').val('');
@@ -220,6 +205,39 @@ async function deleteEntreeJournal(entreeId) {
   }
 }
 
+async function deleteJournalUtilisateur() {
+  const utilisateurId = JSON.parse(window.localStorage.getItem('idUserImm'));
+  try {
+    const data = {
+      utilisateurId,
+    };
+    await $.ajax({
+      url: `${serverUrlJournal}/deleteAllEntreeUtilisateur.php`,
+      method: 'DELETE',
+      data: JSON.stringify(data),
+      contentType: 'application/json',
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function deleteEntreesAliment(alimentId) {
+  const data = {
+    alimentId,
+  };
+  try {
+    await $.ajax({
+      url: `${serverUrlJournal}/deleteAllEntreeAliment.php`,
+      method: 'DELETE',
+      data: JSON.stringify(data),
+      contentType: 'application/json',
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 function isDateBeforeNow(date) {
   const today = new Date();
   const todayDatePart = today.toLocaleDateString();
@@ -246,6 +264,7 @@ async function createEntreeJournal(alimentId, quantite, dateHeure) {
   const utilisateurIdJson = window.localStorage.getItem('idUserImm');
 
   if (!isDateBeforeNow(dateHeure)) {
+    $('.error-journal').text('');
     if (utilisateurIdJson) {
       const data = {
         utilisateurId: JSON.parse(utilisateurIdJson),
@@ -262,12 +281,22 @@ async function createEntreeJournal(alimentId, quantite, dateHeure) {
           data: JSON.stringify(data),
           contentType: 'application/json',
         });
+        $('#aliments-input').attr('data-id', '');
         $('#aliments-input').val('');
         $('#quantite-aliment-journal').val('');
         $('#date-aliment-journal').val('');
         changementJournalContenu();
         createTBodyJournal();
       } catch (err) {
+        const input = $('#aliments-input');
+        if (
+          (input.attr('data-id') === '' ||
+            input.attr('data-id') === undefined) &&
+          input.val() !== ''
+        )
+          $('.error-journal').text(
+            "L'aliment n'est pas dans la base de données."
+          );
         console.error(err);
       }
     } else {
@@ -298,6 +327,118 @@ async function getAllEntreeUtilisateur() {
   }
 }
 
+async function createOptionsCategoriesFiltre() {
+  const select = $(document).find('.list-categories-filtre');
+  const categories = await getAllCat();
+  if (categories.length > 0) {
+    const defaultOption = $('<option>')
+      .val('')
+      .text('Choisir une catégorie')
+      .attr('disabled', 'disabled')
+      .attr('selected', 'selected');
+    select.append(defaultOption);
+    for (const categorie of categories) {
+      const option = $('<option>')
+        .val(categorie.nom)
+        .text(categorie.nom)
+        .on('click', function () {
+          filtreCategorie(categorie.nom);
+        });
+      select.append(option);
+    }
+  }
+}
+
+function clearActiveFiltre() {
+  $('.filtres-date-wrapper > div').removeClass('active-filtre');
+}
+
+function filtreDate(filtre, event) {
+  clearActiveFiltre();
+  event.target.classList.add('active-filtre');
+  let selectedDate = '';
+  switch (filtre) {
+    case 'ajd':
+      selectedDate = convertToEnglishDate(new Date().toLocaleDateString());
+      tableJournal.column(4).search(selectedDate, true, false).draw();
+      break;
+    case 'semaine':
+      today = new Date();
+      const unJourAvant = convertToEnglishDate(
+        new Date(today.setDate(today.getDate() - 1)).toLocaleDateString()
+      );
+      const deuxJourAvant = convertToEnglishDate(
+        new Date(today.setDate(today.getDate() - 1)).toLocaleDateString()
+      );
+      const troisJourAvant = convertToEnglishDate(
+        new Date(today.setDate(today.getDate() - 1)).toLocaleDateString()
+      );
+      const quatreJourAvant = convertToEnglishDate(
+        new Date(today.setDate(today.getDate() - 1)).toLocaleDateString()
+      );
+      const cinqJourAvant = convertToEnglishDate(
+        new Date(today.setDate(today.getDate() - 1)).toLocaleDateString()
+      );
+      const sixJourAvant = convertToEnglishDate(
+        new Date(today.setDate(today.getDate() - 1)).toLocaleDateString()
+      );
+      const septJourAvant = convertToEnglishDate(
+        new Date(today.setDate(today.getDate() - 1)).toLocaleDateString()
+      );
+      today = convertToEnglishDate(new Date().toLocaleDateString());
+      tableJournal
+        .column(4)
+        .search(
+          today +
+            '|' +
+            unJourAvant +
+            '|' +
+            deuxJourAvant +
+            '|' +
+            troisJourAvant +
+            '|' +
+            quatreJourAvant +
+            '|' +
+            cinqJourAvant +
+            '|' +
+            sixJourAvant +
+            '|' +
+            septJourAvant,
+          true,
+          false
+        )
+        .draw();
+      break;
+    case 'mois':
+      selectedDate = convertToEnglishDateYearAndMonth(
+        new Date().toLocaleDateString()
+      );
+      tableJournal.column(4).search(selectedDate, true, false).draw();
+      break;
+    case 'annee':
+      selectedDate = new Date().getFullYear();
+
+      tableJournal.column(4).search(selectedDate, true, false).draw();
+      break;
+    case 'tout':
+      tableJournal.column(4).search(selectedDate, true, false).draw();
+      break;
+  }
+}
+
+function filtreCategorie() {
+  const catNom = $('.list-categories-filtre').val();
+  tableJournal.column(2).search(catNom, true, false).draw();
+}
+
+function clearFiltres() {
+  clearActiveFiltre();
+  tableJournal.column(4).search('', true, false).draw();
+  $('.filtres-date-wrapper div:last-child').addClass('active-filtre');
+  tableJournal.column(2).search('', true, false).draw();
+  $('.list-categories-filtre').val('');
+}
+
 function retourJournal() {
   document.cookie = 'idUpdateEntree=; Max-Age=0';
   $('.journal > h1').text('Journal');
@@ -314,9 +455,14 @@ function addOneEntree() {
   changementJournalContenu();
 }
 
+function resetJournal() {
+  $('.journal input[type="submit"]').val('Ajouter');
+
+  clearFiltres();
+  retourJournal();
+}
+
 $(document).ready(function () {
-  // const selectedDate = '2023-11';
-  // tableJournal.column(3).search(selectedDate, true, false).draw();
   const input = $('#aliments-input');
   const divAutocomplete = $('#list-aliment');
   input.on('input', function () {
@@ -327,6 +473,8 @@ $(document).ready(function () {
   if (utilisateurIdJSON) {
     createTBodyJournal();
   }
+  createOptionsCategoriesFiltre();
+
   $(document).on('click', function (event) {
     if (!input.is(event.target) && !divAutocomplete.is(event.target)) {
       divAutocomplete.hide();

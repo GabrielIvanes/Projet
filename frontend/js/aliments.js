@@ -41,10 +41,11 @@ async function getAllNutriments() {
   }
 }
 
-async function createAliment(nom, categorie_id) {
+async function createAliment(nom, categorie_id, isLiquide) {
   const data = {
     nom,
     categorie_id,
+    isLiquide,
   };
 
   try {
@@ -57,6 +58,7 @@ async function createAliment(nom, categorie_id) {
     alimentId = reponse.alimentId;
     $('#nom-aliment').val('');
     $('#categorie-select').val('');
+    $('#isLiquide-aliment').prop('checked', false);
     createRelationAlimentNutriment(alimentId);
   } catch (err) {
     console.error(err);
@@ -119,7 +121,6 @@ async function deleteNutrimentsAliment(alimentId) {
   const data = {
     alimentId,
   };
-
   try {
     await $.ajax({
       url: `${serverUrlAliment}/deleteNutrimentsAliment.php`,
@@ -127,17 +128,17 @@ async function deleteNutrimentsAliment(alimentId) {
       data: JSON.stringify(data),
       contentType: 'application/json',
     });
-    deleteAliment(alimentId);
   } catch (err) {
     console.error(err);
   }
 }
 
-async function updateAliment(id, nom, categorie_id) {
+async function updateAliment(id, nom, categorie_id, isLiquide) {
   const data = {
     id: id,
     categorie_id: categorie_id,
     nom: nom,
+    isLiquide,
   };
 
   try {
@@ -207,7 +208,6 @@ async function getOneAliment(id) {
   const data = {
     id_aliment: id,
   };
-
   try {
     const reponse = await $.ajax({
       url: `${serverUrlAliment}/getOneAliment.php`,
@@ -225,7 +225,6 @@ async function getNutrimentsAliment(alimentId) {
   const data = {
     alimentId,
   };
-
   try {
     const reponse = await $.ajax({
       url: `${serverUrlAliment}/getNutrimentsAliment.php`,
@@ -238,38 +237,6 @@ async function getNutrimentsAliment(alimentId) {
     console.error(err);
   }
 }
-
-// async function addOneElementTBody(alimentId) {
-//   const aliment = await getOneAliment(alimentId);
-//   const nutriments = await getAllNutriments();
-//   const nutrimentsOfAliment = await getNutrimentsAliment(alimentId);
-
-//   const nutrimentsCol = await Promise.all(
-//     nutriments.map(async (nutriment) => {
-//       if (nutrimentsOfAliment) {
-//         const nutrimentOfAliment = nutrimentsOfAliment.find(
-//           (nutrimentOfAliment) =>
-//             nutrimentOfAliment.nutrimentId === nutriment.id
-//         );
-//         return nutrimentOfAliment ? nutrimentOfAliment.quantite : '';
-//       } else {
-//         return '';
-//       }
-//     })
-//   );
-
-//   tableAliments.rows.add([
-//     aliment.id,
-//     aliment.nom,
-//     catNom,
-//     ...nutrimentsCol,
-//     `
-//         <button onclick="onClickUpdateAliment(event, ${aliment.id});"><i class='fas fa-edit icon'></i></button>
-//         <button onclick="onClickDeleteAliment(event, ${aliment.id});"><i class='fas fa-trash icon'></i></button>`,
-//   ]);
-
-//   tableAliments.draw();
-// }
 
 async function createTBody() {
   if (tableAliments === '') {
@@ -361,7 +328,29 @@ async function createHeadOfTable() {
 
 function onClickDeleteAliment(event, id) {
   event.preventDefault();
-  deleteNutrimentsAliment(id);
+  $('.verification-suppression-aliment').css('display', 'flex');
+  $('.table-wrapper').css('display', 'none');
+  document.cookie = `alimentIdDelete=${id}`;
+}
+
+async function handleVerificationDeleteAliment(verification) {
+  const cookies = document.cookie.split(';');
+  let alimentId = '';
+
+  for (const cookie of cookies) {
+    const [key, value] = cookie.split('=');
+    if (key === 'alimentIdDelete') {
+      alimentId = value;
+    }
+  }
+  document.cookie = 'alimentIdDelete=; Max-Age=0';
+  if (verification === 'valider') {
+    await deleteEntreesAliment(alimentId);
+    await deleteNutrimentsAliment(alimentId);
+    await deleteAliment(alimentId);
+  }
+  $('.verification-suppression-aliment').css('display', 'none');
+  $('.table-wrapper').css('display', 'flex');
 }
 
 async function onClickUpdateAliment(event, id) {
@@ -369,7 +358,7 @@ async function onClickUpdateAliment(event, id) {
 
   document.cookie = `idUpdateAliment=${id}`;
 
-  const { _, nom, categorie_id } = await getOneAliment(id);
+  const { _, nom, categorie_id, isLiquide } = await getOneAliment(id);
 
   const nutriments = await getAllNutriments();
 
@@ -396,6 +385,10 @@ async function onClickUpdateAliment(event, id) {
   $('.aliments .form-group input[type="submit"]').val('Modifier');
   $('#nom-aliment').val(nom);
   $('#categorie-select').val(categorie_id);
+  $('#isLiquide-aliment').prop(
+    'checked',
+    parseInt(isLiquide) === 1 ? true : false
+  );
   changementAlimentContenu();
 }
 
@@ -404,6 +397,7 @@ function handleSubmitFormAliment(event) {
 
   const nom = $('#nom-aliment').val();
   const categorie_id = $('#categorie-select').val();
+  const isLiquide = $('#isLiquide-aliment').prop('checked');
 
   let id = '';
 
@@ -411,16 +405,16 @@ function handleSubmitFormAliment(event) {
 
   for (const cookie of cookies) {
     const [key, value] = cookie.split('=');
-    if (key === 'idUpdateAliment') {
+    if (key.trim() === 'idUpdateAliment') {
       id = value;
     }
   }
 
   if (id !== '') {
     document.cookie = 'idUpdateAliment=; Max-Age=0';
-    updateAliment(id, nom, categorie_id);
+    updateAliment(id, nom, categorie_id, isLiquide);
   } else {
-    createAliment(nom, categorie_id);
+    createAliment(nom, categorie_id, isLiquide);
   }
 }
 
@@ -439,6 +433,8 @@ async function retour() {
   }
   $('#nom-aliment').val('');
   $('#categorie-select').val('');
+  $('#isLiquide-aliment').prop('checked', false);
+
   changementAlimentContenu();
 }
 
@@ -448,6 +444,33 @@ function handleAllAlimentButton() {
     .find('.aliments .form-group input[type="submit"]')
     .text('Ajouter');
   changementAlimentContenu();
+}
+
+async function resetAliment() {
+  document.cookie = 'idUpdateAliment=; Max-Age=0';
+
+  $('#nom-aliment').val('');
+  $('#categorie-select').val('');
+  $('#isLiquide-aliment').prop('checked', false);
+
+  $('.aliments h2').text('Ajouter un aliment');
+  $(document)
+    .find('.aliments .form-group input[type="submit"]')
+    .text('Ajouter');
+
+  const nutriments = await getAllNutriments();
+  for (const nutriment of nutriments) {
+    let nutrimentInput = '';
+    if (nutriment.nom === 'Protéines') {
+      nutrimentInput = $('#proteines-aliment');
+    } else {
+      nutrimentInput = $(`#${nutriment.nom.toLowerCase()}-aliment`);
+    }
+    nutrimentInput.val('');
+  }
+
+  $('.verification-suppression-aliment').css('display', 'none');
+  $('.table-wrapper').css('display', 'flex');
 }
 
 $(document).ready(function () {
