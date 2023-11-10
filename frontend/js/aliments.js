@@ -402,11 +402,9 @@ function handleSubmitFormAliment(event) {
   let id = '';
 
   const cookies = document.cookie.split(';');
-  console.log(cookies);
 
   for (const cookie of cookies) {
     const [key, value] = cookie.split('=');
-    console.log(key);
     if (key.trim() === 'idUpdateAliment') {
       id = value;
     }
@@ -446,6 +444,33 @@ function handleAllAlimentButton() {
     .find('.aliments .form-group input[type="submit"]')
     .text('Ajouter');
   changementAlimentContenu();
+}
+
+async function resetAliment() {
+  document.cookie = 'idUpdateAliment=; Max-Age=0';
+
+  $('#nom-aliment').val('');
+  $('#categorie-select').val('');
+  $('#isLiquide-aliment').prop('checked', false);
+
+  $('.aliments h2').text('Ajouter un aliment');
+  $(document)
+    .find('.aliments .form-group input[type="submit"]')
+    .text('Ajouter');
+
+  const nutriments = await getAllNutriments();
+  for (const nutriment of nutriments) {
+    let nutrimentInput = '';
+    if (nutriment.nom === 'Protéines') {
+      nutrimentInput = $('#proteines-aliment');
+    } else {
+      nutrimentInput = $(`#${nutriment.nom.toLowerCase()}-aliment`);
+    }
+    nutrimentInput.val('');
+  }
+
+  $('.verification-suppression-aliment').css('display', 'none');
+  $('.table-wrapper').css('display', 'flex');
 }
 
 $(document).ready(function () {

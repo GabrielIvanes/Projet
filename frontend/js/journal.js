@@ -34,28 +34,6 @@ async function createTBodyJournal() {
   tableJournal.draw();
 }
 
-function add1Hour(date) {
-  date = new Date(date);
-  date.setHours(date.getHours() + 1);
-
-  const datePart = convertToEnglishDate(date.toLocaleDateString());
-  const heurePart = date.toLocaleTimeString();
-  const [heure, minute, _] = heurePart.split(':');
-
-  return `${datePart} ${heure}:${minute}`;
-}
-
-function remove1Hour(date) {
-  date = new Date(date);
-  date.setHours(date.getHours() - 1);
-
-  const datePart = convertToEnglishDate(date.toLocaleDateString());
-  const heurePart = date.toLocaleTimeString();
-  const [heure, minute, _] = heurePart.split(':');
-
-  return `${datePart} ${heure}:${minute}`;
-}
-
 async function getAutocompleteAliment(mot) {
   try {
     const reponse = await $.ajax({
@@ -475,6 +453,13 @@ function addOneEntree() {
   $('.journal > h1').text('Ajouter une entrée');
   $('.journal input[type="submit"]').val('Ajouter');
   changementJournalContenu();
+}
+
+function resetJournal() {
+  $('.journal input[type="submit"]').val('Ajouter');
+
+  clearFiltres();
+  retourJournal();
 }
 
 $(document).ready(function () {

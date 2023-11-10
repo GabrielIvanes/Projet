@@ -199,10 +199,14 @@ async function displayParamUtilisateur(id) {
 function seDeconnecter() {
   window.localStorage.clear('idUserImm');
   resetProfil();
+  resetAliment();
+  resetJournal();
   $('.inscription-wrapper').css('display', 'none');
   $('.connexion-wrapper').css('display', 'flex');
   $('.parametre-wrapper').css('display', 'none');
   $('.nav-user-bottom').css('display', 'none');
+
+  window.location.href = `profil.php`;
 }
 
 function resetProfil() {
