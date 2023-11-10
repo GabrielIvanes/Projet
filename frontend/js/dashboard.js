@@ -513,7 +513,10 @@ async function createPieCharts(utilisateurId, date) {
     categorieEauId,
     date
   );
-  const energie = await getBesoinEnergetiqueJournalier();
+  const energie = await getBesoinEnergetiqueJournalier(
+    JSON.stringify(utilisateurId)
+  );
+
   creationPieChart(
     energie.toFixed(1),
     quantiteEnergieJour.toFixed(1),

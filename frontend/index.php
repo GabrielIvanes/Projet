@@ -23,7 +23,7 @@ echo '<div class="dashboard">';
             <span>Par jour</span>
         </div>
         <div class="grid-item grand filtre">
-            <div>Filtres des diagrammes circulaires: </div>
+            <div>Filtre des diagrammes circulaires: </div>
             <form action="" id="filtre-date-camemberts-form" onsubmit="handleFilterDate(event);">
                 <input type="date" id="filtre-date-camemberts"/>
                 <input type="submit" value="Filtrer"/>

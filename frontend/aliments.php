@@ -38,36 +38,36 @@ echo '<h1>Aliments</h1>';
             <div class="form-group-row">
                 <div class="form-group">
                     <label for="energie">Energie (en kcal): </label>
-                    <input type="text" id="energie-aliment" name="energie" placeholder="pour 100 g" maxLength="5" pattern="^\d+(\.\d+)?$">
+                    <input type="text" id="energie-aliment" name="energie" placeholder="pour 100 g / 100 mL" maxLength="5" pattern="^\d+(\.\d+)?$">
                 </div>
                 <div class="form-group">
                     <label for="gras">Gras (en g): </label>
-                    <input type="text" id="gras-aliment" name="gras" placeholder="pour 100 g" maxLength="5" pattern="^\d+(\.\d+)?$">
+                    <input type="text" id="gras-aliment" name="gras" placeholder="pour 100 g / 100 mL" maxLength="5" pattern="^\d+(\.\d+)?$">
                 </div>
             </div>
             <div class="form-group-row">
                 <div class="form-group">
                     <label for="sucre">Sucre (en g): </label>
-                    <input type="text" id="sucres-aliment" name="sucre" placeholder="pour 100 g" maxLength="5" pattern="^\d+(\.\d+)?$">
+                    <input type="text" id="sucres-aliment" name="sucre" placeholder="pour 100 g / 100 mL" maxLength="5" pattern="^\d+(\.\d+)?$">
                 </div>
                 <div class="form-group">
                     <label for="sel">Sel (en g): </label>
-                    <input type="text" id="sel-aliment" name="sel" placeholder="pour 100 g" maxLength="5" pattern="^\d+(\.\d+)?$">
+                    <input type="text" id="sel-aliment" name="sel" placeholder="pour 100 g / 100 mL" maxLength="5" pattern="^\d+(\.\d+)?$">
                 </div>
             </div>
             <div class="form-group-row">
                 <div class="form-group">
                     <label for="fibre">Fibres (en g): </label>
-                    <input type="text" id="fibres-aliment" name="fibre" placeholder="pour 100 g" maxLength="5" pattern="^\d+(\.\d+)?$">
+                    <input type="text" id="fibres-aliment" name="fibre" placeholder="pour 100 g / 100 mL" maxLength="5" pattern="^\d+(\.\d+)?$">
                 </div>
                 <div class="form-group">
                     <label for="proteines">Protéines (en g): </label>
-                    <input type="text" id="proteines-aliment" name="proteines" placeholder="pour 100 g" maxLength="5" pattern="^\d+(\.\d+)?$">
+                    <input type="text" id="proteines-aliment" name="proteines" placeholder="pour 100 g / 100 mL" maxLength="5" pattern="^\d+(\.\d+)?$">
                 </div>
             </div>
             <div class="form-group">
                 <label for=fer">Fer (en g): </label>
-                <input type="text" id="fer-aliment" name="fer" placeholder="pour 100 g" maxLength="5" pattern="^\d+(\.\d+)?$">
+                <input type="text" id="fer-aliment" name="fer" placeholder="pour 100 g / 100 mL" maxLength="5" pattern="^\d+(\.\d+)?$">
             </div>
             <div class="form-group">
                 <input type="submit" value="Ajouter">

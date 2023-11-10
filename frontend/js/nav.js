@@ -1,6 +1,4 @@
-async function getBesoinEnergetiqueJournalier() {
-  const idJSON = window.localStorage.getItem('idUserImm');
-
+async function getBesoinEnergetiqueJournalier(idJSON) {
   if (idJSON) {
     const id = JSON.parse(idJSON);
     const utilisateur = await paramUtilisateur(id);
@@ -38,7 +36,12 @@ async function getBesoinEnergetiqueJournalier() {
 }
 
 $(document).ready(async function () {
-  const besoinEnergetiqueJournalier = await getBesoinEnergetiqueJournalier();
-  const div = $('.besoin-energetique-journalier');
-  div.text(`${besoinEnergetiqueJournalier.toFixed(1)} kcal`);
+  const idJSON = window.localStorage.getItem('idUserImm');
+  if (idJSON) {
+    const besoinEnergetiqueJournalier = await getBesoinEnergetiqueJournalier(
+      idJSON
+    );
+    const div = $('.besoin-energetique-journalier');
+    div.text(`${besoinEnergetiqueJournalier.toFixed(1)} kcal`);
+  }
 });

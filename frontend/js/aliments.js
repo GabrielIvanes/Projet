@@ -90,7 +90,10 @@ async function createRelationAlimentNutriment(alimentId) {
           contentType: 'application/json',
         });
         nutrimentInput.val('');
-        changementAlimentContenu();
+        const ajoutAliment = $(document).find('.aliments .ajout-aliment');
+        const datatableAliment = $(document).find('.aliments .table-wrapper');
+        datatableAliment.css('display', 'flex');
+        ajoutAliment.css('display', 'none');
       } catch (err) {
         console.error(err);
       }

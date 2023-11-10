@@ -127,7 +127,11 @@ async function connexionUtilisateur(email, password) {
     const id = reponse.id;
     window.localStorage.setItem('idUserImm', id);
     displayParamUtilisateur(id);
-    getBesoinEnergetiqueJournalier();
+    const besoinEnergetiqueJournalier = await getBesoinEnergetiqueJournalier(
+      JSON.stringify(id)
+    );
+    const div = $('.besoin-energetique-journalier');
+    div.text(`${besoinEnergetiqueJournalier.toFixed(1)} kcal`);
     $('#email-connexion').val('');
     $('#password-connexion').val('');
     $('.inscription-wrapper').css('display', 'none');

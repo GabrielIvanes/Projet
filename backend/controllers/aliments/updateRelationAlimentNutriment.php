@@ -10,7 +10,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 $data = json_decode(file_get_contents("php://input"));
 
-if(!empty($data->alimentId) && !empty($data->nutrimentId) && !empty($data->quantite)) {
+if(!empty($data->alimentId) && !empty($data->nutrimentId) && isset($data->quantite)) {
     
     $alimentId = $data->alimentId;
     $nutrimentId = $data->nutrimentId;
