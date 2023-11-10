@@ -606,6 +606,6 @@ $(document).ready(async function () {
   if (utilisateurIdJSON) {
     const year = new Date().getFullYear();
     const utilisateurId = JSON.parse(utilisateurIdJSON);
-    createAllChart(utilisateurId, 2022);
+    createAllChart(utilisateurId, year);
   }
 });
