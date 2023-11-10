@@ -147,15 +147,33 @@ svg .legend text {
 }
 .grid-item.grand {
   grid-column: span 2;
-  grid-row: span 2;
-}
-.grid-item.grand > div {
-  color: var(--main-color);
+  grid-row: span 1;
 }
 .grid-item.grand ul {
   margin-left: 20px;
-  line-height: 22px;
 }
+.grid-item.grand > div,
 .grid-item.grand ul li {
   color: var(--main-color);
+  font-size: 14px;
+}
+.grid-item.grand form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.grid-item.grand form > input {
+  margin: 5px 0;
+}
+.grid-item.grand form > input[type='submit'] {
+  padding: 5px 10px;
+  width: fit-content;
+  background-color: transparent;
+  border: 1px solid var(--main-color);
+  color: var(--main-color);
+  cursor: pointer;
+}
+.grid-item.grand form > input[type='submit']:hover {
+  background-color: var(--main-color);
+  color: var(--side-color);
 }

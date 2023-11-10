@@ -22,15 +22,12 @@ echo '<div class="dashboard">';
             <div id="produit-laitier-chart"></div>
             <span>Par jour</span>
         </div>
-        <div class="grid-item grand">
-            <div>5 conseils pour un mode de vie plus équilibré: </div>
-            <ul>
-                <li>Des féculents (céréales et légumineuses) à chaque repas</li>
-                <li>De l\'eau à volonté</li>
-                <li>Limiter sa consommation de sucre</li>
-                <li>Limiter sa consommation de matières grasses</li>
-                <li>Au moins l’équivalent de 30 minutes de marche rapide par jour</li>
-            </ul>
+        <div class="grid-item grand filtre">
+            <div>Filtres des diagrammes circulaires: </div>
+            <form action="" id="filtre-date-camemberts-form" onsubmit="handleFilterDate(event);">
+                <input type="date" id="filtre-date-camemberts"/>
+                <input type="submit" value="Filtrer"/>
+            </form>
         </div>
         <div class="grid-item indicateur">
             <span>Viande, œufs et produits de la pêche</span>
@@ -47,7 +44,16 @@ echo '<div class="dashboard">';
             <div id="eau-chart"></div>
             <span>En mL / jour</span>
         </div>
-        
+        <div class="grid-item grand">
+            <div>5 conseils pour un mode de vie plus équilibré: </div>
+            <ul>
+                <li>Des féculents (céréales et légumineuses) à chaque repas</li>
+                <li>De l\'eau à volonté</li>
+                <li>Limiter sa consommation de sucre</li>
+                <li>Limiter sa consommation de matières grasses</li>
+                <li>Au moins l’équivalent de 30 minutes de marche rapide par jour</li>
+            </ul>
+        </div>
     </div>
     <div class="grid-container-bottom">
         <div class="grid-item recap">

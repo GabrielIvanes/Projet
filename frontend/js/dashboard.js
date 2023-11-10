@@ -233,20 +233,14 @@ async function getQuantiteNutrimentParDate(utilisateurId, nutrimentId, date) {
   const entreesParDate = await getAllEntreeParDate(utilisateurId, date);
   if (entreesParDate !== undefined && entreesParDate.length > 0) {
     for (const entree of entreesParDate) {
-      console.log(entree);
       const quantiteNutrimentAliment = await getQuantiteNutrimentAliment(
         nutrimentId,
         entree.alimentId
       );
-      console.log(quantiteNutrimentAliment);
-      console.log(typeof quantiteNutrimentAliment);
-      console.log(entree.quantite);
-      console.log(typeof entree.quantite);
 
       totalQuantiteNutriment +=
         (parseFloat(entree.quantite) * parseFloat(quantiteNutrimentAliment)) /
         100;
-      console.log(totalQuantiteNutriment);
     }
 
     return totalQuantiteNutriment;
@@ -258,22 +252,13 @@ async function getQuantiteNutrimentParDate(utilisateurId, nutrimentId, date) {
 async function getQuantiteCategorieParDate(utilisateurId, categorieId, date) {
   let totalQuantiteCategorie = 0;
   const entreesParDate = await getAllEntreeParDate(utilisateurId, date);
-  console.log(entreesParDate);
   if (entreesParDate !== undefined && entreesParDate.length > 0) {
     for (const entree of entreesParDate) {
-      console.log(entree);
       const aliment = await getOneAliment(entree.alimentId);
-      console.log(aliment);
-      console.log(aliment.categorie_id);
-      console.log(typeof aliment.categorie_id);
-      console.log(categorieId);
-      console.log(typeof categorieId);
-      console.log(entree.quantite);
-      console.log(typeof entree.quantite);
+
       if (aliment.categorie_id === categorieId) {
         totalQuantiteCategorie += parseFloat(entree.quantite);
       }
-      console.log(totalQuantiteCategorie);
     }
     return totalQuantiteCategorie;
   } else {
@@ -351,68 +336,22 @@ async function createDivRecap(utilisateurId, date) {
   }
 }
 
-// Permet de créer tous les graphiques du tableau de bord avec un spinner pendant la création
-async function createAllChart(utilisateurId, anneeChoisie) {
-  const energie = await getBesoinEnergetiqueJournalier();
+function handleFilterDate(event) {
+  event.preventDefault();
+  const utilisateurId = JSON.parse(window.localStorage.getItem('idUserImm'));
+  const newDate = $('.grid-item.grand form > input[type="date"]').val();
+  createPieCharts(utilisateurId, newDate);
+}
 
-  $('.dashboard .spinner').css('display', 'flex');
-  $('.dashboard .grid-container').css('display', 'none');
-  $('.dashboard .grid-container-bottom').css('display', 'none');
-
-  const data = [];
-
-  const year = new Date().getFullYear();
-
-  const today = convertToEnglishDate(new Date().toLocaleDateString());
-
-  const filtresNutrimentsGraph = $('.filtres-line-graph');
-
-  // Reset des graphiques et des filtres
-  filtresNutrimentsGraph.html('');
+async function createPieCharts(utilisateurId, date) {
   $('#energie-chart').html('');
   $('#fruit-legume-chart').html('');
   $('#produit-laitier-chart').html('');
   $('#viande-oeuf-peche-chart').html('');
   $('#sel-chart').html('');
   $('#eau-chart').html('');
-  $('#graph-container').text('');
 
-  // Construction des filtres pour le graphique en ligne
-  for (let i = parseInt(year - 2); i <= parseInt(year); i++) {
-    const div = $('<div>')
-      .text(i)
-      .on('click', function (event) {
-        handleClickYearFilter(event);
-      });
-    if (i === anneeChoisie) {
-      div.addClass('active-year');
-    }
-    filtresNutrimentsGraph.append(div);
-  }
-
-  for (let i = 1; i <= 12; i++) {
-    const mois = i < 10 ? `0${i}` : `${i}`;
-    const date = `${anneeChoisie}-${mois}`;
-    const entreeDate = await getAllEntreeParDate(utilisateurId, date);
-    if (entreeDate !== undefined) {
-      const nutriments = await getAllNutriments();
-      for (const nutriment of nutriments) {
-        if (nutriment.nom !== 'Energie') {
-          const quantiteNutrimentParMois = await getQuantiteNutrimentParDate(
-            utilisateurId,
-            nutriment.id,
-            date
-          );
-          const dataObject = {
-            NUTRIMENT_NOM: nutriment.nom,
-            MOIS: getNomMois(parseInt(mois)),
-            QUANTITE: quantiteNutrimentParMois.toFixed(2),
-          };
-          data.push(dataObject);
-        }
-      }
-    }
-  }
+  $('.grid-item.grand form > input[type="date"]').val(date);
 
   let nutrimentSelId = 0;
   let nutrimentEnergieId = 0;
@@ -435,7 +374,7 @@ async function createAllChart(utilisateurId, anneeChoisie) {
   const quantiteSelJour = await getQuantiteNutrimentParDate(
     utilisateurId,
     nutrimentSelId,
-    today
+    date
   );
 
   // Energie
@@ -443,7 +382,7 @@ async function createAllChart(utilisateurId, anneeChoisie) {
   const quantiteEnergieJour = await getQuantiteNutrimentParDate(
     utilisateurId,
     nutrimentEnergieId,
-    today
+    date
   );
 
   // Fruits - Légumes
@@ -502,12 +441,12 @@ async function createAllChart(utilisateurId, anneeChoisie) {
   const quantiteLegumeJour = await getQuantiteCategorieParDate(
     utilisateurId,
     categorieFruitId,
-    today
+    date
   );
   const quantiteFruitJour = await getQuantiteCategorieParDate(
     utilisateurId,
     categorieLegumeId,
-    today
+    date
   );
   const quantiteFruitLegumeJour = (
     (quantiteLegumeJour + quantiteFruitJour) /
@@ -520,17 +459,17 @@ async function createAllChart(utilisateurId, anneeChoisie) {
   const quantiteFromageJour = await getQuantiteCategorieParDate(
     utilisateurId,
     categorieFromageId,
-    today
+    date
   );
   const quantiteLaitJour = await getQuantiteCategorieParDate(
     utilisateurId,
     categorieLaitId,
-    today
+    date
   );
   const quantiteYahourtJour = await getQuantiteCategorieParDate(
     utilisateurId,
     categorieYahourtId,
-    today
+    date
   );
 
   const quantiteProduitLaitierJour = (
@@ -545,22 +484,22 @@ async function createAllChart(utilisateurId, anneeChoisie) {
   const quantiteViandeJour = await getQuantiteCategorieParDate(
     utilisateurId,
     categorieViandeId,
-    today
+    date
   );
   const quantiteVolailleJour = await getQuantiteCategorieParDate(
     utilisateurId,
     categorieVolailleId,
-    today
+    date
   );
   const quantiteOeufJour = await getQuantiteCategorieParDate(
     utilisateurId,
     categorieOeufId,
-    today
+    date
   );
   const quantitePecheJour = await getQuantiteCategorieParDate(
     utilisateurId,
     categoriePoissonId,
-    today
+    date
   );
   const quantiteViandeOeufPecheJour = (
     (quantiteViandeJour + quantiteVolailleJour) / 125 +
@@ -572,14 +511,9 @@ async function createAllChart(utilisateurId, anneeChoisie) {
   const quantiteEauJour = await getQuantiteCategorieParDate(
     utilisateurId,
     categorieEauId,
-    today
+    date
   );
-  console.log(today);
-  console.log(quantiteEauJour);
-  console.log(quantiteFruitLegumeJour);
-  console.log(quantiteProduitLaitierJour);
-  console.log(quantiteViandeOeufPecheJour);
-
+  const energie = await getBesoinEnergetiqueJournalier();
   creationPieChart(
     energie.toFixed(1),
     quantiteEnergieJour.toFixed(1),
@@ -597,8 +531,67 @@ async function createAllChart(utilisateurId, anneeChoisie) {
   creationPieChart(2, quantiteViandeOeufPecheJour, 'viande-oeuf-peche-chart');
   creationPieChart(5, quantiteSelJour.toFixed(1), 'sel-chart'); // https://www.mangerbouger.fr/l-essentiel/les-recommandations-sur-l-alimentation-l-activite-physique-et-la-sedentarite/reduire/reduire-les-produits-sales-et-le-sel
   creationPieChart(1500, quantiteEauJour, 'eau-chart');
+}
 
-  createDivRecap(utilisateurId, today);
+// Permet de créer tous les graphiques du tableau de bord avec un spinner pendant la création
+async function createAllChart(utilisateurId, anneeChoisie) {
+  $('.dashboard .spinner').css('display', 'flex');
+  $('.dashboard .grid-container').css('display', 'none');
+  $('.dashboard .grid-container-bottom').css('display', 'none');
+
+  const data = [];
+
+  const year = new Date().getFullYear();
+
+  const today = convertToEnglishDate(new Date().toLocaleDateString());
+
+  const filtresNutrimentsGraph = $('.filtres-line-graph');
+
+  // Reset des graphiques et des filtres
+  filtresNutrimentsGraph.html('');
+
+  $('#graph-container').text('');
+
+  // Construction des filtres pour le graphique en ligne
+  for (let i = parseInt(year - 2); i <= parseInt(year); i++) {
+    const div = $('<div>')
+      .text(i)
+      .on('click', function (event) {
+        handleClickYearFilter(event);
+      });
+    if (i === anneeChoisie) {
+      div.addClass('active-year');
+    }
+    filtresNutrimentsGraph.append(div);
+  }
+
+  for (let i = 1; i <= 12; i++) {
+    const mois = i < 10 ? `0${i}` : `${i}`;
+    const date = `${anneeChoisie}-${mois}`;
+    const entreeDate = await getAllEntreeParDate(utilisateurId, date);
+    if (entreeDate !== undefined) {
+      const nutriments = await getAllNutriments();
+      for (const nutriment of nutriments) {
+        if (nutriment.nom !== 'Energie') {
+          const quantiteNutrimentParMois = await getQuantiteNutrimentParDate(
+            utilisateurId,
+            nutriment.id,
+            date
+          );
+          const dataObject = {
+            NUTRIMENT_NOM: nutriment.nom,
+            MOIS: getNomMois(parseInt(mois)),
+            QUANTITE: quantiteNutrimentParMois.toFixed(2),
+          };
+          data.push(dataObject);
+        }
+      }
+    }
+  }
+
+  await createPieCharts(utilisateurId, today);
+
+  await createDivRecap(utilisateurId, today);
 
   $('.dashboard .spinner').css('display', 'none');
   $('.dashboard .grid-container').css('display', 'grid');
@@ -613,6 +606,6 @@ $(document).ready(async function () {
   if (utilisateurIdJSON) {
     const year = new Date().getFullYear();
     const utilisateurId = JSON.parse(utilisateurIdJSON);
-    createAllChart(utilisateurId, year);
+    createAllChart(utilisateurId, 2022);
   }
 });
