@@ -22,7 +22,8 @@ if ($num > 0) {
         $aliment_item = array(
             "id"=>$ID,
             "categorie_id"=>$CAT_ID,
-            "nom"=>$NOM
+            "nom"=>$NOM,
+            "isLiquide"=>$ISLIQUIDE
 
         );
   
