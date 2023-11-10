@@ -22,11 +22,11 @@ Sur cette page, vous pouvez voir les aliments créés avec la valeur de leur nut
 
 ### Page Journal
 
-Sur cette page, vous pouvez accéder à votre journal de tout ce que vous avez mangé. Vous filtrer les résultats par dates ou par catégories. Vous pouvez aussi créer de nouvelles entrées dans votre journal.
+Sur cette page, vous pouvez accéder à votre journal de tout ce que vous avez mangé. Vous filtrez les résultats par dates ou par catégories. Vous pouvez aussi créer de nouvelles entrées dans votre journal.
 
 ### Page Tableau de bord
 
-Sur cette page, vous pouvez voir des graphiques qui vous permettent de mieux vous situer sur la manière dans vous mangez.
+Sur cette page, vous pouvez voir des graphiques qui vous permettent de mieux vous situer sur la manière dont vous mangez.
 
 Graphiques circulaires:
 Ils reprennent les bonnes pratiques conseillées par l'OMS sachant que:
