@@ -82,6 +82,11 @@ async function updateUtilisateur(
     });
 
     displayParamUtilisateur(id);
+    const besoinEnergetiqueJournalier = await getBesoinEnergetiqueJournalier(
+      JSON.stringify(id)
+    );
+    const div = $('.besoin-energetique-journalier');
+    div.text(`${besoinEnergetiqueJournalier.toFixed(1)} kcal`);
     $('.inscription-wrapper .form-group.password').css('display', 'block');
     $('.inscription-wrapper .form-group.password').prop('required', true);
     $('.inscription-wrapper input[type="submit"]').val('Sinscrire');
