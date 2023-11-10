@@ -10,7 +10,7 @@ if(isset($_GET['aliment'])) {
 
     $sql = "SELECT ALIMENT.ID as ALIID, ALIMENT.NOM as ALINAME, CATEGORIE_ALIMENT.NOM as CATNAME FROM ALIMENT 
     INNER JOIN CATEGORIE_ALIMENT ON ALIMENT.CAT_ID = CATEGORIE_ALIMENT.ID 
-    WHERE ALIMENT.NOM LIKE '$aliment%' LIMIT 20;";
+    WHERE ALIMENT.NOM LIKE '%$aliment%' LIMIT 20;";
 
     $request = $pdo->prepare($sql);
 
@@ -28,7 +28,6 @@ if(isset($_GET['aliment'])) {
             
             $aliment_item = array(
                 "id"=>$ALIID,
-                "categorie" => $CATNAME,
                 "nom"=>$ALINAME,
 
             );

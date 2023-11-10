@@ -30,7 +30,8 @@ if(!empty($data->id_aliment) ) {
        $aliment_item = array(
             "id"=>$ID,
             "categorie_id"=>$CAT_ID,
-            "nom"=>$NOM
+            "nom"=>$NOM,
+            "isLiquide"=>$ISLIQUIDE
 
         );
         
