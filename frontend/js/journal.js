@@ -21,8 +21,11 @@ async function createTBodyJournal() {
       Id: entree.id,
       Aliment: entree.aliment,
       Catégorie: entree.cat,
-      Quantité: entree.quantite,
-      Date: add1Hour(entree.date),
+      Quantité:
+        parseInt(entree.isLiquide) === 1
+          ? `${entree.quantite} mL`
+          : `${entree.quantite} g`,
+      Date: entree.date,
       Opérations: `
             <button class="operations" onclick="onClickUpdateJournal(event, ${entree.id});"><i class='fas fa-edit icon'></i></button>
             <button class="operations" onclick="onClickDeleteJournal(event, ${entree.id});"><i class='fas fa-trash icon'></i></button>`,
@@ -83,8 +86,7 @@ async function createDivAutocomplete() {
         .on('click', function (event) {
           choisirAliment(event);
         })
-        .attr('data-id', aliment.id)
-        .attr('data-cat', aliment.categorie);
+        .attr('data-id', aliment.id);
       divAutocomplete.append(div);
     }
   }
@@ -95,8 +97,7 @@ function choisirAliment(event) {
   const input = $('#aliments-input');
   input
     .val(aliment.textContent)
-    .attr('data-id', aliment.getAttribute('data-id'))
-    .attr('data-cat', aliment.getAttribute('data-cat'));
+    .attr('data-id', aliment.getAttribute('data-id'));
 }
 
 function handleSubmitFormJournal(event) {
@@ -166,7 +167,7 @@ async function onClickUpdateJournal(event, entreeId) {
   $('#aliments-input').val(alimentNom);
   $('#aliments-input').attr('data-id', alimentId);
   $('#quantite-aliment-journal').val(quantite);
-  $('#date-aliment-journal').val(add1Hour(date));
+  $('#date-aliment-journal').val(date);
   changementJournalContenu();
 }
 
@@ -178,7 +179,7 @@ async function updateEntreeJournal(entreeId, alimentId, quantite, dateHeure) {
         entreeId,
         alimentId,
         quantite,
-        date: remove1Hour(dateHeure),
+        date: dateHeure,
       };
       await $.ajax({
         url: `${serverUrlJournal}/updateEntreeJournal.php`,
@@ -188,7 +189,7 @@ async function updateEntreeJournal(entreeId, alimentId, quantite, dateHeure) {
       });
       $('.journal > h1').text('Journal');
       $('#aliments-input').val('');
-      $('#aliments-input').removeAttr('data-id');
+      $('#aliments-input').attr('data-id', '');
       $('#quantite-aliment-journal').val('');
       $('.journal > h1').text('Journal');
       $('#date-aliment-journal').val('');
@@ -285,6 +286,7 @@ async function createEntreeJournal(alimentId, quantite, dateHeure) {
   const utilisateurIdJson = window.localStorage.getItem('idUserImm');
 
   if (!isDateBeforeNow(dateHeure)) {
+    $('.error-journal').text('');
     if (utilisateurIdJson) {
       const data = {
         utilisateurId: JSON.parse(utilisateurIdJson),
@@ -301,12 +303,22 @@ async function createEntreeJournal(alimentId, quantite, dateHeure) {
           data: JSON.stringify(data),
           contentType: 'application/json',
         });
+        $('#aliments-input').attr('data-id', '');
         $('#aliments-input').val('');
         $('#quantite-aliment-journal').val('');
         $('#date-aliment-journal').val('');
         changementJournalContenu();
         createTBodyJournal();
       } catch (err) {
+        const input = $('#aliments-input');
+        if (
+          (input.attr('data-id') === '' ||
+            input.attr('data-id') === undefined) &&
+          input.val() !== ''
+        )
+          $('.error-journal').text(
+            "L'aliment n'est pas dans la base de données."
+          );
         console.error(err);
       }
     } else {

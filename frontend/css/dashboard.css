@@ -1,0 +1,161 @@
+.dashboard {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.dashboard > h1 {
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.grid-container {
+  margin: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(5, 230px);
+  grid-template-rows: 120px 120px;
+  grid-gap: 20px;
+}
+.grid-container-bottom {
+  margin: 20px;
+  margin-bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /*292.5*/
+  grid-template-rows: 310px;
+  grid-gap: 20px;
+  grid-gap: 20px;
+}
+.grid-item {
+  background-color: var(--side-color);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+}
+.grid-item > span {
+  color: var(--main-color);
+  text-align: center;
+}
+.grid-item.line-graph {
+  grid-column: span 3;
+}
+.grid-item.line-graph .graph-container {
+  color: var(--main-color);
+  z-index: 4;
+}
+.grid-item svg g text {
+  font-size: 16px;
+  font-weight: bolder;
+}
+.filtres-line-graph {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+.filtres-line-graph > div {
+  color: var(--main-color);
+  padding: 5px 10px;
+  border: 1px solid var(--main-color);
+  margin: 0 5px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.filtres-line-graph > div.active-year,
+.filtres-line-graph > div:hover {
+  background-color: var(--main-color);
+  color: var(--side-color);
+}
+#graph-container {
+  color: var(--main-color);
+}
+.line-chart > g > text {
+  stroke: var(--main-color) !important;
+}
+.x-axis .tick text {
+  font-size: 13px;
+}
+.x-axis .tick text,
+.x-axis path,
+.y-axis .tick text,
+.y-axis path {
+  color: var(--main-color) !important;
+  stroke: var(--main-color) !important;
+  font-size: 13px;
+}
+.x-axis .tick line {
+  stroke: var(--main-color) !important;
+}
+.y-axis .tick line {
+  stroke: var(--main-color) !important;
+}
+svg .legend text {
+  stroke: var(--main-color) !important;
+}
+.spinner {
+  height: calc(100% - 70px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+.grid-item.recap {
+  justify-content: start;
+  padding-top: 5px;
+}
+.grid-item.recap div {
+  color: var(--main-color);
+}
+.grid-item.recap hr {
+  width: 100%;
+  border: 1px solid var(--main-color);
+}
+.grid-item.recap .grid {
+  width: 100%;
+  height: 100%;
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+}
+.grid-item.recap .filtres-recap {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+.grid-item.recap .filtres-recap div {
+  border: 1px solid var(--main-color);
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 6px;
+  margin-bottom: 10px;
+}
+.grid-item.recap .filtres-recap div.active-recap,
+.grid-item.recap .filtres-recap div:hover {
+  color: var(--side-color);
+  background-color: var(--main-color);
+}
+.grid-item.recap .grid div.val-kcal::after {
+  content: ' kcal';
+}
+.grid-item.recap .grid div.val-g::after {
+  content: ' g';
+}
+.grid-item.recap .grid > div {
+  align-self: center;
+  justify-self: center;
+}
+.grid-item.grand {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+.grid-item.grand > div {
+  color: var(--main-color);
+}
+.grid-item.grand ul {
+  margin-left: 20px;
+  line-height: 22px;
+}
+.grid-item.grand ul li {
+  color: var(--main-color);
+}

@@ -48,8 +48,8 @@ echo '
             <div id="list-aliment"></div>
         </div>
         <div class="form-group">
-            <label for="quantite-aliment-journal">Quantité: </label>
-            <input type="text" id="quantite-aliment-journal" name="quantite-aliment-journal" placeholder="Quantité ..." required maxLength="4" pattern="[0-9]+">
+            <label for="quantite-aliment-journal">Quantité (en g ou en mL): </label>
+            <input type="text" id="quantite-aliment-journal" name="quantite-aliment-journal" placeholder="Quantité en g ou mL" required maxLength="4" pattern="[0-9]+">
         </div>
         <div class="form-group">
             <label for="date-aliment-journal">Date: </label>

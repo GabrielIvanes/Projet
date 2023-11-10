@@ -24,8 +24,11 @@
   justify-content: space-around;
   align-items: center;
 }
+
 .aliments .table-wrapper > div {
   width: calc(100% - 20px);
+  max-height: 550px;
+  overflow-y: auto;
 }
 .aliments #table-aliments th:nth-child(3),
 .aliments #table-aliments td:nth-child(3) {
@@ -95,4 +98,20 @@
 }
 .verification-suppression-aliment {
   display: none;
+}
+.aliments .isLiquide-form {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: fit-content;
+}
+.aliments .isLiquide-form div,
+.aliments .isLiquide-form input {
+  width: fit-content;
+  vertical-align: middle;
+}
+.aliments .isLiquide-form input {
+  margin-left: 10px;
+  accent-color: var(--side-color);
 }
