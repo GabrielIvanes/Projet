@@ -43,7 +43,7 @@ if(!empty($data->alimentId) ) {
   
         echo json_encode($contient_arr);
     } else {
-        http_response_code(503);
+        http_response_code(404);
   
         echo json_encode(array("message" => "Aucun nutriment trouvé pour l'aliment $alimentId."));
     }

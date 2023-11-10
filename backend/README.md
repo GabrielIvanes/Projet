@@ -47,7 +47,7 @@ Tous les éléments envoyés et reçus sont au format JSON.
 
 ```json
 {
-    id_aliment: int
+    "id_aliment":
 }
 ```
 
@@ -65,8 +65,8 @@ Tous les éléments envoyés et reçus sont au format JSON.
 
 ```json
 {
-    alimentId: int,
-    nutrimentId: int
+    "alimentId":,
+    "nutrimentId":
 }
 ```
 
@@ -84,7 +84,7 @@ Tous les éléments envoyés et reçus sont au format JSON.
 
 ```json
 {
-    alimentId: int
+    "alimentId":,
 }
 ```
 
