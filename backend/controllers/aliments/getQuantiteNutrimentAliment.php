@@ -33,7 +33,7 @@ if(!empty($data->alimentId) && !empty($data->nutrimentId)) {
   
         echo json_encode(array("quantite" => $QUANTITE)); 
     } else {
-        http_response_code(503);
+        http_response_code(404);
   
         echo json_encode(array("message" => "Pas de relation entre le nutriment $nutrimentId et l'aliment $alimentId"));
     }
