@@ -10,6 +10,7 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
+SET foreign_key_checks = 0;
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -593,6 +594,8 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
 INSERT INTO `utilisateur` (`ID`, `PRA_ID`, `NOM_UTILISATEUR`, `EMAIL`, `PASSWORD`, `SEXE`, `AGE`, `POIDS`, `TAILLE`) VALUES
 (60, 3, 'John Doe', 'john.doe@gmail.com', 'JohnDoe123!', 0, 23, '80', '176'),
 (61, 2, 'Jane Doe', 'jane.doe@gmail.com', 'JaneDoe123!', 1, 46, '68', '163');
+
+SET foreign_key_checks = 1;
 
 --
 -- Contraintes pour les tables déchargées
