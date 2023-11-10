@@ -29,7 +29,7 @@ if (!empty($data->id)) {
         $row = $request->fetch(PDO::FETCH_ASSOC);
         extract($row);
 
-        http_response_code(201);
+        http_response_code(200);
   
         echo json_encode(array("message" => "L'utilisateur $ID a été trouvé.", "utilisateur" => $row));
     } else {

@@ -52,7 +52,7 @@ if(!empty($data -> utilisateurId) && !empty($data -> date)) {
   
         echo json_encode($journal_arr);
     } else {
-        http_response_code(503);
+        http_response_code(404);
   
         echo json_encode(array("message" => "Aucune entrée trouvé."));
     }

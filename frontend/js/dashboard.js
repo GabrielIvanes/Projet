@@ -197,7 +197,7 @@ async function getAllEntreeParDate(utilisateurId, date) {
       date,
     };
     const reponse = await $.ajax({
-      url: `${serverUrlJournal}/getAllEntreeUtilisateurJour.php`,
+      url: `${serverUrlJournal}/getAllEntreeUtilisateurDate.php`,
       method: 'POST',
       data: JSON.stringify(data),
       contentType: 'application/json',

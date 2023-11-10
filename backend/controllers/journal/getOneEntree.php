@@ -44,7 +44,7 @@ if(!empty($data->entreeId) ) {
   
         echo json_encode($entree_item);
     } else {
-        http_response_code(503);
+        http_response_code(404);
   
         echo json_encode(array("message" => "Aucun entree trouvé."));
     }
